@@ -4,7 +4,7 @@ import Navbar from "../Shared/Navbar";
 
 const Mainlayout = () => {
   return (
-    <div className="dark:bg-gray-800">
+    <div className="dark:bg-gray-800 dark:text-white">
       <header>
         <nav>
           <Navbar />
