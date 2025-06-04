@@ -1,12 +1,13 @@
 import React from "react";
 import useTheme from "../Hooks/useTheme";
+import { MoonStar, Sun } from "lucide-react";
 
 const ThemeToggleButton = () => {
   const { theme, themeToggler } = useTheme();
 
   return (
-    <button onClick={themeToggler} className="p-2 bg-gray-300 dark:bg-gray-800">
-      Switch to {theme === "light" ? "dark" : "light"} mode
+    <button onClick={themeToggler} className="cursor-pointer" >
+      {theme === "light" ? <MoonStar className="bg-[#EFF6FF] text-[#2563EB]" />  : <Sun className=" text-amber-50"/>} 
     </button>
   );
 };
