@@ -1,0 +1,179 @@
+import { useState } from 'react';
+import { Link } from 'react-router';
+import { Helmet } from 'react-helmet';
+import { motion } from 'framer-motion';
+
+// Mock rooms data
+const roomsData = [/* same as before */];
+
+const Rooms = () => {
+  const [viewMode, setViewMode] = useState('grid');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+  const [filteredRooms, setFilteredRooms] = useState(roomsData);
+
+  const handlePriceFilter = () => {
+    const min = parseInt(priceRange.min) || 0;
+    const max = parseInt(priceRange.max) || Infinity;
+    const filtered = roomsData.filter(room => room.price >= min && room.price <= max);
+    setFilteredRooms(filtered);
+  };
+
+  const resetFilter = () => {
+    setPriceRange({ min: '', max: '' });
+    setFilteredRooms(roomsData);
+  };
+
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span key={i} className={`text-yellow-400 ${i >= Math.floor(rating) ? 'text-gray-300' : ''}`}>★</span>
+    ));
+  };
+
+  const GridView = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {filteredRooms.map(room => (
+        <motion.div key={room.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+          <Link to={`/room/${room.id}`}>
+            <div className="border rounded-lg overflow-hidden shadow-sm bg-white hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="relative">
+                <img src={room.image} alt={room.title} className="w-full h-48 object-cover" />
+                <div className="absolute top-2 right-2 bg-white px-2 py-1 text-sm rounded shadow">
+                  ${room.price}/night
+                </div>
+              </div>
+              <div className="p-4">
+                <h2 className="text-xl font-semibold mb-2">{room.title}</h2>
+                <p className="text-sm text-gray-600 mb-2">{room.description}</p>
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center gap-1">{renderStars(room.rating)}<span className="text-xs text-gray-500">({room.reviews})</span></div>
+                  <div className="text-sm text-gray-600">👥 {room.capacity} guests</div>
+                </div>
+                <div className="flex gap-1 flex-wrap text-xs text-gray-700 mb-3">
+                  {room.amenities.slice(0, 3).map((a, i) => (
+                    <span key={i} className="bg-gray-100 px-2 py-1 rounded">{a}</span>
+                  ))}
+                </div>
+                <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">View Details</button>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+  );
+
+  const TableView = () => (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border rounded shadow-sm">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-3 text-left">Room</th>
+            <th className="p-3 text-left">Price</th>
+            <th className="p-3 text-left">Capacity</th>
+            <th className="p-3 text-left">Rating</th>
+            <th className="p-3 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredRooms.map(room => (
+            <tr key={room.id} className="border-t">
+              <td className="p-3">
+                <div className="flex items-center gap-3">
+                  <img src={room.image} alt={room.title} className="w-16 h-16 object-cover rounded" />
+                  <div>
+                    <div className="font-semibold">{room.title}</div>
+                    <div className="text-xs text-gray-600">{room.description}</div>
+                  </div>
+                </div>
+              </td>
+              <td className="p-3">${room.price}/night</td>
+              <td className="p-3">{room.capacity} guests</td>
+              <td className="p-3">{renderStars(room.rating)} <span className="text-xs text-gray-500">({room.reviews})</span></td>
+              <td className="p-3">
+                <Link to={`/room/${room.id}`}>
+                  <button className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">View Details</button>
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <>
+      <Helmet>
+        <title>Rooms - LuxeStay Hotel</title>
+        <meta name="description" content="Browse our collection of luxury hotel rooms and suites" />
+      </Helmet>
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Navigation would be here if needed */}
+        <div className="max-w-7xl mx-auto p-6">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+            <h1 className="text-3xl font-bold mb-2">Our Rooms & Suites</h1>
+            <p className="text-gray-600">Discover comfort and luxury in every room</p>
+          </motion.div>
+
+          {/* Filter Controls */}
+          <div className="bg-white p-6 rounded shadow-sm mb-6">
+            <div className="flex flex-col md:flex-row justify-between gap-4">
+              <div className="flex gap-4 flex-wrap">
+                <div>
+                  <label htmlFor="minPrice" className="block text-sm font-medium mb-1">Min Price</label>
+                  <input
+                    id="minPrice"
+                    type="number"
+                    value={priceRange.min}
+                    onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+                    className="border rounded px-3 py-2 w-24"
+                    placeholder="Min"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="maxPrice" className="block text-sm font-medium mb-1">Max Price</label>
+                  <input
+                    id="maxPrice"
+                    type="number"
+                    value={priceRange.max}
+                    onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+                    className="border rounded px-3 py-2 w-24"
+                    placeholder="Max"
+                  />
+                </div>
+                <div className="flex items-end gap-2">
+                  <button onClick={handlePriceFilter} className="px-4 py-2 border rounded hover:bg-gray-100">Filter</button>
+                  <button onClick={resetFilter} className="px-4 py-2 border rounded hover:bg-gray-100">Reset</button>
+                </div>
+              </div>
+              <div className="flex items-end gap-2">
+                <span className="text-sm">View:</span>
+                <button onClick={() => setViewMode('grid')} className={`px-3 py-2 border rounded ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}>🔳</button>
+                <button onClick={() => setViewMode('table')} className={`px-3 py-2 border rounded ${viewMode === 'table' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}>📋</button>
+              </div>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="mb-6">
+            <p className="text-sm text-gray-600 mb-4">Showing {filteredRooms.length} of {roomsData.length} rooms</p>
+            {filteredRooms.length > 0 ? (
+              viewMode === 'grid' ? <GridView /> : <TableView />
+            ) : (
+              <div className="bg-white p-6 rounded shadow-sm text-center">
+                <h3 className="text-lg font-semibold mb-2">No rooms found</h3>
+                <p className="text-gray-600 mb-4">Try adjusting your price filters</p>
+                <button onClick={resetFilter} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Reset Filters</button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer would be here if needed */}
+      </div>
+    </>
+  );
+};
+
+export default Rooms;
