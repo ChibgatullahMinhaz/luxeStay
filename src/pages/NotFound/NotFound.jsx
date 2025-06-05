@@ -15,7 +15,7 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-white to-blue-50 dark:bg-gray-900 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-[#EFF6FF] via-white to-blue-50 flex items-center justify-center">
       <div className="max-w-2xl mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -64,7 +64,6 @@ const NotFound = () => {
             exist. Don't worry, our concierge is here to help you find your way
             back!
           </motion.p>
-
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -72,20 +71,15 @@ const NotFound = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
             <Link to="/">
-              <button
-                size="lg"
-                className="w-full flex items-center bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition-all duration-200 cursor-pointer text-lg px-8 py-3"
-              >
+              <button className="w-full sm:w-sm justify-center text-lg px-8 py-3 flex items-center bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition-all duration-200 cursor-pointer rounded">
                 <Home className="w-5 h-5 mr-2" />
                 Back to Home
               </button>
             </Link>
 
             <button
-              size="lg"
-              variant="outline"
               onClick={() => window.history.back()}
-              className="text-lg px-8 py-3 w-full flex items-center bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition-all duration-200 cursor-pointer"
+              className="w-full sm:max-w-sm justify-center text-lg px-8 py-3 flex items-center bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition-all duration-200 cursor-pointer rounded"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />
               Go Back

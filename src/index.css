@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-
+body {
+  overflow-x: hidden !important;
+}
 :root {
   background-color: hsl(0, 0%, 100%);
   color: hsl(222.2, 84%, 4.9%);
