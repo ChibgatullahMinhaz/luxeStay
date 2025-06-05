@@ -64,7 +64,7 @@ function Login() {
             </Link>
           </div>
 
-          <div className="rounded-lg border bg-white  text-black shadow-xl">
+          <div className="rounded-lg border   bg-gradient-to-br  to-blue-50  text-black shadow-xl">
             <div className="text-center p-6 flex flex-col space-y-1.5">
               <h3 className="text-2xl font-bold">Welcome Back</h3>
               <p className="text-sm text-muted-foreground">
