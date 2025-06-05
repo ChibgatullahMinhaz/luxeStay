@@ -1,10 +1,76 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-// Mock rooms data
-const roomsData = [/* same as before */];
+const roomsData = [
+  {
+    id: '1',
+    title: 'Presidential Suite',
+    price: 500,
+    image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400',
+    description: 'Experience ultimate luxury in our Presidential Suite featuring panoramic city views.',
+    amenities: ['Free Wi-Fi', 'Room Service', 'City View'],
+    capacity: 4,
+    reviews: 24,
+    rating: 4.8
+  },
+  {
+    id: '2',
+    title: 'Ocean View Deluxe',
+    price: 350,
+    image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=400',
+    description: 'Relax in our Ocean View Deluxe room with stunning sea views and modern amenities.',
+    amenities: ['Ocean View', 'Balcony', 'Free Wi-Fi'],
+    capacity: 2,
+    reviews: 18,
+    rating: 4.6
+  },
+  {
+    id: '3',
+    title: 'Executive Business Suite',
+    price: 450,
+    image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400',
+    description: 'Perfect for business travelers with dedicated workspace and premium amenities.',
+    amenities: ['Business Center', 'Free Wi-Fi', 'Work Desk'],
+    capacity: 2,
+    reviews: 15,
+    rating: 4.7
+  },
+  {
+    id: '4',
+    title: 'Family Comfort Room',
+    price: 280,
+    image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400',
+    description: 'Spacious family room with comfortable beds and child-friendly amenities.',
+    amenities: ['Family Friendly', 'Free Wi-Fi', 'Twin Beds'],
+    capacity: 6,
+    reviews: 22,
+    rating: 4.5
+  },
+  {
+    id: '5',
+    title: 'Romantic Honeymoon Suite',
+    price: 400,
+    image: 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=400',
+    description: 'Intimate suite perfect for couples with romantic ambiance and special amenities.',
+    amenities: ['Romantic Setup', 'Jacuzzi', 'Free Wi-Fi'],
+    capacity: 2,
+    reviews: 31,
+    rating: 4.9
+  },
+  {
+    id: '6',
+    title: 'Standard City Room',
+    price: 180,
+    image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400',
+    description: 'Comfortable and affordable room with all essential amenities for city travelers.',
+    amenities: ['City View', 'Free Wi-Fi', 'Air Conditioning'],
+    capacity: 2,
+    reviews: 12,
+    rating: 4.3
+  }
+];
 
 const Rooms = () => {
   const [viewMode, setViewMode] = useState('grid');
@@ -109,15 +175,19 @@ const Rooms = () => {
       </Helmet>
 
       <div className="min-h-screen bg-gray-50">
-        {/* Navigation would be here if needed */}
         <div className="max-w-7xl mx-auto p-6">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Our Rooms & Suites</h1>
             <p className="text-gray-600">Discover comfort and luxury in every room</p>
           </motion.div>
 
-          {/* Filter Controls */}
-          <div className="bg-white p-6 rounded shadow-sm mb-6">
+          {/* 🔄 Animated Filter Panel */}
+          <motion.div
+            className="bg-white p-6 rounded shadow-sm mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="flex gap-4 flex-wrap">
                 <div>
@@ -153,24 +223,50 @@ const Rooms = () => {
                 <button onClick={() => setViewMode('table')} className={`px-3 py-2 border rounded ${viewMode === 'table' ? 'bg-blue-600 text-white' : 'hover:bg-gray-100'}`}>📋</button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Results */}
+          {/* 🔄 Animated Room Display */}
           <div className="mb-6">
             <p className="text-sm text-gray-600 mb-4">Showing {filteredRooms.length} of {roomsData.length} rooms</p>
-            {filteredRooms.length > 0 ? (
-              viewMode === 'grid' ? <GridView /> : <TableView />
-            ) : (
-              <div className="bg-white p-6 rounded shadow-sm text-center">
-                <h3 className="text-lg font-semibold mb-2">No rooms found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your price filters</p>
-                <button onClick={resetFilter} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Reset Filters</button>
-              </div>
-            )}
+            <AnimatePresence mode="wait">
+              {filteredRooms.length > 0 ? (
+                viewMode === 'grid' ? (
+                  <motion.div
+                    key="grid"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <GridView />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="table"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <TableView />
+                  </motion.div>
+                )
+              ) : (
+                <motion.div
+                  key="no-results"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="bg-white p-6 rounded shadow-sm text-center"
+                >
+                  <h3 className="text-lg font-semibold mb-2">No rooms found</h3>
+                  <p className="text-gray-600 mb-4">Try adjusting your price filters</p>
+                  <button onClick={resetFilter} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Reset Filters</button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-
-        {/* Footer would be here if needed */}
       </div>
     </>
   );
