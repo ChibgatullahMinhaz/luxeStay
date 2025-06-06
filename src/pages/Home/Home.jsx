@@ -25,7 +25,7 @@ const Home = () => {
       </Helmet>{" "}
 
 
-      <div className="min-h-screen">
+      <div className="min-h-screen overflow-hidden">
       <HeroSlider />
       <FeaturedRooms />
       <SpecialOffers />

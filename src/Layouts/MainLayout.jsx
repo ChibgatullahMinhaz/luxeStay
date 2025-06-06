@@ -1,9 +1,23 @@
-import React from "react";
-import { Outlet } from "react-router";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation } from "react-router";
 import Navbar from "../Shared/Navbar";
 import Footer from "../Shared/Footer";
+import LoadingSpinner from "../Components/LoadingSpiner";
 
 const Mainlayout = () => {
+  const [routeLoader, setRouteLoading] = useState(true);
+  const location = useLocation();
+  useEffect(() => {
+    setRouteLoading(false);
+  }, [location]);
+
+  if (routeLoader) {
+    return (
+      <>
+        <LoadingSpinner />
+      </>
+    );
+  }
   return (
     <div className="dark:bg-gray-800 dark:text-white">
       <header>
@@ -11,9 +25,7 @@ const Mainlayout = () => {
           <Navbar />
         </nav>
       </header>
-      <main>
-        <Outlet />
-      </main>
+      <main>{routeLoader ? <LoadingSpinner /> : <Outlet />}</main>
       <footer>
         <Footer />
       </footer>

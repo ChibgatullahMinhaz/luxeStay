@@ -72,7 +72,7 @@ const reviews = [
 
 const UserReviews = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-blue-50 dark:bg-gray-700 dark:bg-none">
+    <section className="py-20 overflow-hidden bg-gradient-to-b from-white to-blue-50 dark:bg-gray-700 dark:bg-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -166,7 +166,7 @@ const UserReviews = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
           viewport={{ once: false }}
-          className="text-center mt-12"
+          className="text-center mt-12 overflow-hidden"
         >
           <motion.div
             initial={{ y: 50, opacity: 0 }}
