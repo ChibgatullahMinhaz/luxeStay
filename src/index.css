@@ -34,3 +34,10 @@ body {
   --input: hsl(214.3, 31.8%, 91.4%);
   --ring: hsl(222.2, 84%, 4.9%);
 }
+
+#offerModal {
+  background-image: url("https://images.unsplash.com/photo-1584132967334-10e028bd69f7?q=80&w=2070");
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.9;
+}

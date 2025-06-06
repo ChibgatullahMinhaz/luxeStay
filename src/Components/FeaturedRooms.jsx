@@ -72,7 +72,7 @@ amenities: ["wifi", "directions_car", "local_cafe", "tv"]
 
 const FeaturedRooms = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-blue-50  to-white dark:bg-gray-800 dark:bg-none">
+    <section className="py-20 bg-gradient-to-b from-blue-50  to-white dark:bg-gray-700 dark:bg-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -100,7 +100,7 @@ const FeaturedRooms = () => {
               whileHover={{ y: -10 }}
               className="group"
             >
-              <div className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-lg bg-blue-50 dark:bg-gray-700">
+              <div className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 rounded-lg bg-blue-50 dark:bg-gray-800">
                 <div className="relative overflow-hidden">
                   <img
                     src={room.image}

@@ -49,8 +49,7 @@ const AuthProvider = ({ children }) => {
       return () => unsubscribe();
     });
   }, []);
-  
-console.log(user)
+
   const authInfo = {
     user,
     isLoading,
