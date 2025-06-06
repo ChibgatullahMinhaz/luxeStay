@@ -6,9 +6,11 @@ import { routes } from "./Routes/router";
 import ThemeProvider from "./Store/Provider/ThemeProvider";
 import "leaflet/dist/leaflet.css";
 import AuthProvider from "./Store/Provider/AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
+    <ToastContainer />
     <ThemeProvider>
       <AuthProvider>
         <RouterProvider router={routes} />

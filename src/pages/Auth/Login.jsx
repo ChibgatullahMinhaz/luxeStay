@@ -3,31 +3,33 @@ import { Link } from "react-router";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, MapPin } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
+import useAuth from "../../Hooks/useAuth";
 
 function Login() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    const formData = new FormData(e.target);
+    const { email, password } = Object.fromEntries(formData.entries());
+
+    if (!email || !password) {
+      toast.error("Please enter both email and password.");
+      return;
+    }
 
     try {
-      if (!formData.email || !formData.password) {
-        throw new Error("Please fill in all fields");
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Logged in successfully!");
-      window.location.href = "/";
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Login failed");
+      setIsLoading(true);
+      const res = await login(email, password);
+      console.log(res)
+      toast.success("Logged in!");
+      e.target.reset();
+    } catch (err) {
+      toast.error(err.message || "Login failed. Try again.");
     } finally {
       setIsLoading(false);
     }

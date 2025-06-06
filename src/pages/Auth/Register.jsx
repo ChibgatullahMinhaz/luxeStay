@@ -1,76 +1,50 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { toast } from "react-toastify";
+import validatePassword from "../../Utilities/passVerification";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    photoURL: '',
-    password: '',
-    confirmPassword: ''
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const validatePassword = (password) => {
-    const hasUppercase = /[A-Z]/.test(password);
-    const hasLowercase = /[a-z]/.test(password);
-    const hasMinLength = password.length >= 6;
-
-    if (!hasMinLength) {
-      return 'Password must be at least 6 characters long';
-    }
-    if (!hasUppercase) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!hasLowercase) {
-      return 'Password must contain at least one lowercase letter';
-    }
-    return null;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    const { name, email, photoURL, password, confirmPassword } =
+      Object.fromEntries(formData.entries());
     setIsLoading(true);
 
     try {
-      if (!formData.name || !formData.email || !formData.password) {
-        throw new Error('Please fill in all required fields');
+      if (!name || !email || !password) {
+        throw new Error("Please fill in all required fields");
       }
 
-      const passwordError = validatePassword(formData.password);
+      const passwordError = validatePassword(password);
       if (passwordError) {
-        throw new Error(passwordError);
+        toast.error(passwordError);
+        return;
       }
 
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
       }
-
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert('Account created successfully!');
-      window.location.href = '/login';
     } catch (error) {
-      alert(error.message || 'Registration failed');
+      alert(error.message || "Registration failed");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleGoogleSignup = () => {
-    alert('Google signup feature coming soon!');
+    toast.info("Google signup feature coming soon!");
   };
 
   return (
-    <div style={{ minHeight: '100vh' }} className="flex items-center justify-center bg-gradient-to-br  to-blue-50  p-4">
+    <div
+      style={{ minHeight: "100vh" }}
+      className="flex items-center justify-center bg-gradient-to-br  to-blue-50  p-4"
+    >
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <a href="/" className="flex items-center justify-center space-x-2">
@@ -78,12 +52,15 @@ const Register = () => {
               <span>📍</span>
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-[#2563EB]  dark:from-amber-50  bg-clip-text text-transparent">
-                LuxeStay
-              </span>          </a>
+              LuxeStay
+            </span>{" "}
+          </a>
         </div>
 
         <div className=" bg-gradient-to-br  to-blue-50 p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center mb-2">Create Account</h2>
+          <h2 className="text-2xl font-bold text-center mb-2">
+            Create Account
+          </h2>
           <p className="text-center text-sm text-gray-600 dark:text-white mb-6">
             Join LuxeStay for exclusive benefits and personalized service
           </p>
@@ -96,8 +73,6 @@ const Register = () => {
                   id="name"
                   name="name"
                   type="text"
-                  value={formData.name}
-                  onChange={handleInputChange}
                   placeholder="Enter your full name"
                   className="w-full pl-10 p-2 border rounded"
                   required
@@ -113,8 +88,6 @@ const Register = () => {
                   id="email"
                   name="email"
                   type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
                   placeholder="Enter your email"
                   className="w-full pl-10 p-2 border rounded"
                   required
@@ -130,8 +103,6 @@ const Register = () => {
                   id="photoURL"
                   name="photoURL"
                   type="url"
-                  value={formData.photoURL}
-                  onChange={handleInputChange}
                   placeholder="Enter photo URL"
                   className="w-full pl-10 p-2 border rounded"
                 />
@@ -145,9 +116,7 @@ const Register = () => {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={handleInputChange}
+                  type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   className="w-full pl-10 pr-10 p-2 border rounded"
                   required
@@ -157,7 +126,7 @@ const Register = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-gray-400"
                 >
-                  {showPassword ? '🙈' : '👁️'}
+                  {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
@@ -172,9 +141,7 @@ const Register = () => {
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
                   className="w-full pl-10 pr-10 p-2 border rounded"
                   required
@@ -184,7 +151,7 @@ const Register = () => {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-3 text-gray-400"
                 >
-                  {showConfirmPassword ? '🙈' : '👁️'}
+                  {showConfirmPassword ? "🙈" : "👁️"}
                 </button>
               </div>
             </div>
@@ -194,11 +161,13 @@ const Register = () => {
               disabled={isLoading}
               className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
             >
-              {isLoading ? 'Creating Account...' : 'Create Account'}
+              {isLoading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
-          <div className="my-4 text-center text-gray-500 text-sm">Or continue with</div>
+          <div className="my-4 text-center text-gray-500 text-sm">
+            Or continue with
+          </div>
 
           <button
             type="button"
@@ -209,7 +178,7 @@ const Register = () => {
           </button>
 
           <p className="mt-4 text-center text-sm text-gray-600">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <a href="/login" className="text-blue-600 hover:underline">
               Sign in here
             </a>
