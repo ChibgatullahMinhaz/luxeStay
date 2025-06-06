@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, MapPin } from "lucide-react";
 import { toast } from "react-toastify";
 import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 function Login() {
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,9 +26,17 @@ function Login() {
     try {
       setIsLoading(true);
       const res = await login(email, password);
-      console.log(res)
-      toast.success("Logged in!");
-      e.target.reset();
+      if (res) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logged In!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/");
+        e.target.reset();
+      }
     } catch (err) {
       toast.error(err.message || "Login failed. Try again.");
     } finally {

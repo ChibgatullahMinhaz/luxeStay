@@ -1,43 +1,80 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import validatePassword from "../../Utilities/passVerification";
+import useAuth from "../../Hooks/useAuth";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../Service/Firebase.init";
 
 const Register = () => {
+  const { singUp, loginWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigate();
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  setIsLoading(true);
+
+  try {
     const formData = new FormData(e.target);
-    const { name, email, photoURL, password, confirmPassword } =
-      Object.fromEntries(formData.entries());
-    setIsLoading(true);
+    const { name, photoURL, password, confirmPassword } = Object.fromEntries(
+      formData.entries()
+    );
+    const email = formData.get("email").trim();
+    console.log(name, email, password);
 
-    try {
-      if (!name || !email || !password) {
-        throw new Error("Please fill in all required fields");
-      }
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-      const passwordError = validatePassword(password);
-      if (passwordError) {
-        toast.error(passwordError);
-        return;
-      }
-
-      if (password !== confirmPassword) {
-        toast.error("Passwords do not match");
-        return;
-      }
-    } catch (error) {
-      alert(error.message || "Registration failed");
-    } finally {
-      setIsLoading(false);
+    if (!name || !email || !password) {
+      throw new Error("Please fill in all required fields");
     }
-  };
 
-  const handleGoogleSignup = () => {
-    toast.info("Google signup feature coming soon!");
+    if (!isValidEmail(email)) {
+      throw new Error("Please enter a valid email address.");
+    }
+
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      throw new Error(passwordError);
+    }
+
+    if (password !== confirmPassword) {
+      throw new Error("Passwords do not match");
+    }
+
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+
+    if (result) {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Account created successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      navigation("/");
+    }
+  } catch (error) {
+    toast.error(error.message || "Registration failed");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+  const handleGoogleSignup = async () => {
+    await loginWithGoogle();
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Login Successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   return (

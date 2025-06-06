@@ -20,9 +20,9 @@ const Mainlayout = () => {
     );
   }
   return (
-    <>
-    <ScrollToTop />
     <div className="dark:bg-gray-800 dark:text-white">
+      <ScrollToTop />
+
       <header>
         <nav>
           <Navbar />
@@ -33,7 +33,6 @@ const Mainlayout = () => {
         <Footer />
       </footer>
     </div>
-    </>
   );
 };
 

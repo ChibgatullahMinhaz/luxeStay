@@ -1,18 +1,39 @@
 import React, { useState } from "react";
 import ThemeToggleButton from "./ThemeToggleButton";
 import { Menu, X, MapPin, Calendar, User } from "lucide-react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion } from "framer-motion";
+import useAuth from "../Hooks/useAuth";
+import { signOut } from "firebase/auth";
+import { auth } from "../Service/Firebase.init";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 const Navbar = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
+  const navigate = useNavigate();
   const navItems = [
     { name: "Home", path: "/", icon: MapPin },
     { name: "Rooms", path: "/rooms", icon: Calendar },
     { name: "My Bookings", path: "/bookings", icon: User },
   ];
-
+  const handleLogout = async () => {
+    signOut(auth)
+      .then(() => {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logout successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/login");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
   return (
     <motion.nav
       initial={{ y: -100 }}
@@ -31,7 +52,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex justify-between items-center space-x-8">
             <ThemeToggleButton />
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -39,7 +60,7 @@ const Navbar = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 ${
+                  className={`flex justify-around items-center  px-3 py-2 rounded-lg transition-all duration-200 ${
                     location.pathname === item.path
                       ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
                       : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50 "
@@ -50,11 +71,20 @@ const Navbar = () => {
                 </Link>
               );
             })}
-            <Link to="/login">
-              <button className="px-4  py-2 text-white rounded-md bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
-                Login
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
+              >
+                Logout
               </button>
-            </Link>
+            ) : (
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                <button className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
+                  Login
+                </button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -79,9 +109,7 @@ const Navbar = () => {
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0
-                
-             }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
             className="lg:hidden "
           >
@@ -104,11 +132,20 @@ const Navbar = () => {
                   </Link>
                 );
               })}
-              <Link to="/login" onClick={() => setIsOpen(false)}>
-                <button className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
-                  Login
+              {user ? (
+                <button
+                  onClick={handleLogout}
+                  className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
+                >
+                  Logout
                 </button>
-              </Link>
+              ) : (
+                <Link to="/login" onClick={() => setIsOpen(false)}>
+                  <button className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
+                    Login
+                  </button>
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
