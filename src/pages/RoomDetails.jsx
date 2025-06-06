@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useParams, Navigate } from 'react-router';
+import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Users, Wifi, Star } from 'lucide-react';
 import { toast } from 'sonner';

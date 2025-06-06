@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router";
 import Navbar from "../Shared/Navbar";
 import Footer from "../Shared/Footer";
 import LoadingSpinner from "../Components/LoadingSpiner";
+import ScrollToTop from "../Components/ScrollToTop";
 
 const Mainlayout = () => {
   const [routeLoader, setRouteLoading] = useState(true);
@@ -19,6 +20,8 @@ const Mainlayout = () => {
     );
   }
   return (
+    <>
+    <ScrollToTop />
     <div className="dark:bg-gray-800 dark:text-white">
       <header>
         <nav>
@@ -30,6 +33,7 @@ const Mainlayout = () => {
         <Footer />
       </footer>
     </div>
+    </>
   );
 };
 

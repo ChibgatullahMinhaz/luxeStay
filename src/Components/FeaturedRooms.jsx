@@ -148,7 +148,7 @@ const FeaturedRooms = () => {
                     ))}
                   </div>
 
-                  <Link to={`/room/${room.id}`}>
+                  <Link to={`/roomsDetails/${room.id}`}>
                     <button className="w-full cursor-pointer bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-md hover:from-purple-700 hover:to-purple-800 transition-all duration-200">
                       Book Now
                     </button>
