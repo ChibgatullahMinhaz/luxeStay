@@ -39,7 +39,7 @@ const UserReviews = () => {
     slidesToShow: 3,       
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 2000,
     responsive: [
       {
         breakpoint: 1024,   
@@ -78,7 +78,7 @@ const UserReviews = () => {
           </p>
         </motion.div>
 
-        {/* Loading State */}
+      
         {loading ? (
           <div className="text-center text-lg text-gray-600 dark:text-gray-200">
             Loading reviews...

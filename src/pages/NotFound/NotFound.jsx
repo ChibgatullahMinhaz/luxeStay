@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Home, ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
-
+import Lottie from "lottie-react";
+import notFoundGif from '../../../public/notFoundGif.json'
 const NotFound = () => {
   const location = useLocation();
 
@@ -29,21 +30,9 @@ const NotFound = () => {
             transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
             className="mb-8"
           >
-            <img
-              src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=400"
-              alt="404 - Page not found"
-              className="w-80 h-60 object-cover rounded-2xl mx-auto shadow-2xl"
-            />
+             <Lottie animationData={notFoundGif} loop={true} />
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] bg-clip-text text-transparent mb-4"
-          >
-            404
-          </motion.h1>
 
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
