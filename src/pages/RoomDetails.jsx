@@ -1,42 +1,14 @@
 import { useState } from "react";
-import { useParams, Navigate } from "react-router";
+import { useParams, Navigate, useNavigate } from "react-router";
 import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { Calendar, MapPin, Users, Wifi, Star } from "lucide-react";
 import { toast } from "sonner";
+import useAuth from "../Hooks/useAuth";
+import useRoomList from "../Hooks/useRoomList";
+import useGetReviews from "../Hooks/useGetReviews";
 
-const roomsData = [
-  {
-    id: "1",
-    title: "Presidential Suite",
-    price: 500,
-    image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800",
-    description: "Experience ultimate luxury in our Presidential Suite...",
-    amenities: [
-      "Free Wi-Fi",
-      "Room Service",
-      "City View",
-      "King Bed",
-      "Marble Bathroom",
-    ],
-    capacity: 4,
-    size: "85 sqm",
-    isAvailable: true,
-    reviews: 24,
-    rating: 4.8,
-  },
-  {
-    id: "2",
-    title: "Ocean View Deluxe",
-    price: 350,
-    image: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800",
-    description: "Relax in our Ocean View Deluxe room...",
-    amenities: ["Ocean View", "Balcony", "Free Wi-Fi", "Queen Bed", "Mini Bar"],
-    capacity: 2,
-    size: "45 sqm",
-    isAvailable: true,
-  },
-];
+
 
 const reviewsData = [
   {
@@ -58,16 +30,28 @@ const reviewsData = [
 ];
 
 const RoomDetails = () => {
+  const { user } = useAuth();
+  const hotels = useRoomList()
+  const reviews = useGetReviews()
   const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState("");
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-
-  const room = roomsData.find((r) => r.id === id);
-  const roomReviews = reviewsData.filter((r) => r.roomId === id);
+  const navigate = useNavigate();
+  
+  const room = hotels.find((r) => r.id === id);
+  const roomReviews = reviews?.filter((r) => r.roomId === id);
 
   if (!room) return <Navigate to="/404" replace />;
 
   const handleBooking = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    setIsBookingModalOpen(true);
+  };
+
+  const handleConfirmBooking = () => {
     if (!selectedDate) {
       toast.error("Please select a booking date");
       return;
@@ -146,7 +130,7 @@ const RoomDetails = () => {
               </div>
 
               <button
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={handleBooking}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded disabled:opacity-50"
                 disabled={!room.isAvailable}
               >
@@ -154,7 +138,7 @@ const RoomDetails = () => {
               </button>
 
               {isBookingModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
                   <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md space-y-4">
                     <h2 className="text-xl font-bold mb-2">
                       Book {room.title}
@@ -195,7 +179,7 @@ const RoomDetails = () => {
                     </div>
                     <div className="flex gap-2">
                       <button
-                        onClick={handleBooking}
+                        onClick={handleConfirmBooking}
                         className="bg-blue-600 text-white px-4 py-2 rounded w-full"
                       >
                         Confirm Booking

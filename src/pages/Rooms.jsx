@@ -3,9 +3,13 @@ import { Link } from "react-router";
 import { Helmet } from "react-helmet";
 import { motion, AnimatePresence } from "framer-motion";
 import useRoomList from "../Hooks/useRoomList";
+import useGetReviews from "../Hooks/useGetReviews";
+import { Star } from "lucide-react";
 
 const Rooms = () => {
   const hotels = useRoomList();
+  const reviews = useGetReviews();
+  console.log(reviews);
   const [viewMode, setViewMode] = useState("grid");
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -33,18 +37,36 @@ const Rooms = () => {
     setFilteredRooms(hotels);
   };
 
-  const renderStars = (rating) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <span
-        key={i}
-        className={`text-yellow-400 ${
-          i >= Math.floor(rating) ? "text-gray-300" : ""
-        }`}
-      >
-        ★
-      </span>
-    ));
+
+
+  const renderTotalReview = (id) => {
+    const rooms = reviews?.filter((r) => r.roomId === id);
+    return <span>{rooms.length} </span>;
   };
+ 
+  const averageRating  = (id) => {
+  const roomReviews = reviews?.filter((r) => r.roomId === id);
+
+  if (!roomReviews || roomReviews.length === 0) {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span key={i} className="text-gray-300">★</span>
+    ));
+  }
+
+  
+  const total = roomReviews.reduce((sum, r) => sum + r.rating, 0);
+  const avg = total / roomReviews.length;
+
+ return Array.from({ length: 5 }, (_, i) => (
+      <Star
+        key={i}
+        className={`w-4 h-4 ${
+          i < avg ? "text-yellow-400 fill-current" : "text-gray-300"
+        }`}
+      />
+    ))
+};
+
 
   const GridView = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -55,7 +77,7 @@ const Rooms = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Link to={`/room/${room.id}`}>
+          <Link to={`/roomsDetails/${room.id}`}>
             <div className="border rounded-lg overflow-hidden shadow-sm bg-white hover:shadow-lg transition-shadow cursor-pointer">
               <div className="relative">
                 <img
@@ -69,14 +91,12 @@ const Rooms = () => {
               </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{room.title}</h2>
-                <p className="text-sm text-gray-600 mb-2">
-                  {room.description}
-                </p>
+                <p className="text-sm text-gray-600 mb-2">{room.description}</p>
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-1">
-                    {renderStars(room.rating)}
+                    {averageRating(room.id)}
                     <span className="text-xs text-gray-500">
-                      ({room.reviews})
+                      ({renderTotalReview(room.id)})
                     </span>
                   </div>
                   <div className="text-sm text-gray-600">
@@ -184,7 +204,10 @@ const Rooms = () => {
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="flex gap-4 flex-wrap">
                 <div>
-                  <label htmlFor="minPrice" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="minPrice"
+                    className="block text-sm font-medium mb-1"
+                  >
                     Min Price
                   </label>
                   <input
@@ -199,7 +222,10 @@ const Rooms = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="maxPrice" className="block text-sm font-medium mb-1">
+                  <label
+                    htmlFor="maxPrice"
+                    className="block text-sm font-medium mb-1"
+                  >
                     Max Price
                   </label>
                   <input

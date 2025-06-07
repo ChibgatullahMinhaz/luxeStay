@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Home, ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import Lottie from "lottie-react";
-import notFoundGif from '../../../public/notFoundGif.json'
+import notFoundGif from '../../assets/notFoundGif.json'
 const NotFound = () => {
   const location = useLocation();
 
