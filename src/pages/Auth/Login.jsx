@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (e) => {
@@ -44,8 +44,16 @@ function Login() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    toast.info("Google login feature coming soon!");
+  const handleGoogleLogin = async () => {
+    await loginWithGoogle();
+    Swal.fire({
+      position: "top-end",
+      icon: "success",
+      title: "Login Successfully",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    navigate("/");
   };
 
   return (

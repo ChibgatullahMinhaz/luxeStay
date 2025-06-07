@@ -8,8 +8,6 @@ import useAuth from "../Hooks/useAuth";
 import useRoomList from "../Hooks/useRoomList";
 import useGetReviews from "../Hooks/useGetReviews";
 
-
-
 const reviewsData = [
   {
     id: "1",
@@ -31,13 +29,13 @@ const reviewsData = [
 
 const RoomDetails = () => {
   const { user } = useAuth();
-  const hotels = useRoomList()
-  const reviews = useGetReviews()
+  const hotels = useRoomList();
+  const reviews = useGetReviews();
   const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState("");
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const navigate = useNavigate();
-  
+
   const room = hotels.find((r) => r.id === id);
   const roomReviews = reviews?.filter((r) => r.roomId === id);
 
@@ -79,7 +77,7 @@ const RoomDetails = () => {
         <meta name="description" content={room.description} />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,7 +94,7 @@ const RoomDetails = () => {
 
             <div className="space-y-6">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-2">
                   {room.title}
                 </h1>
                 <p className="text-2xl font-bold text-blue-600">
@@ -104,7 +102,7 @@ const RoomDetails = () => {
                 </p>
               </div>
 
-              <p className="text-gray-600">{room.description}</p>
+              <p className="text-gray-600 dark:text-gray-200">{room.description}</p>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
@@ -116,14 +114,25 @@ const RoomDetails = () => {
                   <span>{room.size}</span>
                 </div>
               </div>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {room?.featured?.map((feature, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
 
               <div>
                 <h3 className="text-lg font-semibold mb-3">Amenities</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {room.amenities.map((amenity, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Wifi className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm">{amenity}</span>
+                <div className="flex items-center space-x-2 mb-6">
+                  {room?.amenities?.map((icon, idx) => (
+                    <div key={idx} className="p-2 bg-gray-100 rounded-lg">
+                      <span className="material-icons text-gray-600  text-base">
+                        {icon}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -131,7 +140,7 @@ const RoomDetails = () => {
 
               <button
                 onClick={handleBooking}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded disabled:opacity-50"
+                className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-3 rounded disabled:opacity-50"
                 disabled={!room.isAvailable}
               >
                 {room.isAvailable ? "Book Now" : "Not Available"}
@@ -139,7 +148,7 @@ const RoomDetails = () => {
 
               {isBookingModalOpen && (
                 <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-                  <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md space-y-4">
+                  <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 w-full max-w-md space-y-4">
                     <h2 className="text-xl font-bold mb-2">
                       Book {room.title}
                     </h2>
@@ -180,13 +189,13 @@ const RoomDetails = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={handleConfirmBooking}
-                        className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+                        className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded w-full"
                       >
                         Confirm Booking
                       </button>
                       <button
                         onClick={() => setIsBookingModalOpen(false)}
-                        className="bg-gray-300 text-black px-4 py-2 rounded w-full"
+                        className="bg-gray-300 cursor-pointer text-black px-4 py-2 rounded w-full"
                       >
                         Cancel
                       </button>
@@ -203,7 +212,7 @@ const RoomDetails = () => {
             transition={{ delay: 0.2 }}
             className="mt-12"
           >
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-200 mb-6">
               Guest Reviews
             </h2>
             {roomReviews.length > 0 ? (
@@ -215,16 +224,16 @@ const RoomDetails = () => {
                   >
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h4 className="font-semibold">{review.userName}</h4>
+                        <h4 className="font-semibold">{review.name}</h4>
                         <div className="flex items-center space-x-1">
                           {renderStars(review.rating)}
                         </div>
                       </div>
-                      <span className="text-sm text-gray-500">
-                        {review.timestamp}
+                      <span className="text-sm text-gray-500 dark:text-gray-200">
+                        {review.date}
                       </span>
                     </div>
-                    <p className="text-gray-600">{review.comment}</p>
+                    <p className="text-gray-600 dark:text-gray-200">{review.comment}</p>
                   </div>
                 ))}
               </div>

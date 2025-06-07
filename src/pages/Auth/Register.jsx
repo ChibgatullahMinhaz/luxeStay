@@ -75,6 +75,7 @@ const Register = () => {
       showConfirmButton: false,
       timer: 1500,
     });
+     navigation("/");
   };
 
   return (
@@ -209,7 +210,7 @@ const Register = () => {
           <button
             type="button"
             onClick={handleGoogleSignup}
-            className="w-full border border-gray-300 py-2 rounded hover:bg-gray-100 flex items-center justify-center"
+            className="w-full border cursor-pointer border-gray-300 py-2 rounded hover:bg-gray-100 flex items-center justify-center"
           >
             <span className="mr-2">🔍</span> Continue with Google
           </button>
