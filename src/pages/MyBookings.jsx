@@ -1,24 +1,32 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
-import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import loadMyBookins from "../Service/getMyBookinsg";
 import useRoomList from "../Hooks/useRoomList";
+import { toast } from "react-toastify";
+import useAuth from "../Hooks/useAuth";
+import axios from "axios";
+import LoadingSpinner from "../Components/LoadingSpiner";
+import moment from "moment";
+import Swal from "sweetalert2";
 
 const MyBookings = () => {
+  const { user } = useAuth();
   const hotels = useRoomList();
-  const [selectedBooking, setSelectedBooking] = useState(null);
   const [newDate, setNewDate] = useState("");
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
-  const [review, setReview] = useState({ rating: 5, comment: "" });
+  const [review, setReview] = useState({ rating: 0, comment: "" });
+  const queryClient = useQueryClient();
 
-  const { data: myAllBookings } = useQuery({
+  const token = user?.accessToken;
+
+  const { data: myAllBookings, isPending } = useQuery({
     queryKey: ["myBooked"],
     queryFn: loadMyBookins,
   });
-  console.log(myAllBookings);
 
   const filterBookedRooms = hotels.filter((h) =>
     myAllBookings?.some((b) => b.roomId === h.id)
@@ -31,13 +39,129 @@ const MyBookings = () => {
       status: booking?.status,
     };
   });
-  
 
-  const handleCancelBooking = (bookingId) => {};
+  const handleUpdateDate = async () => {
+    if (!newDate) {
+      return toast.info("please Pick a Date !");
+    }
+    const updateExistingDate = {
+      newDate,
+      roomId: selectedBooking?._id,
+      email: user?.email,
+    };
+    try {
+      const res = await axios.patch(
+        "http://localhost:3000/booking/date/update",
+        updateExistingDate,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const handleUpdateDate = () => {};
+      if (res.data.acknowledged) {
+        toast.success("Booking Date Update successfully!");
+        setIsUpdateModalOpen(false);
+      }
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      toast.error(err.response?.data?.message || err.message);
+    }
+  };
 
-  const handleSubmitReview = () => {};
+  const handleSubmitReview = async () => {
+    if (!review?.rating > 0) {
+      return toast.info("please give rating as number");
+    }
+    if (!review?.comment.length > 0) {
+      return toast.info("please Write something about our room and Service");
+    }
+
+    const date = new Date();
+    const reviewData = {
+      name: user?.displayName,
+      ...review,
+      date,
+      roomId: selectedBooking._id,
+      avatar: user?.photoURL,
+      email: user?.email,
+    };
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/give/review",
+        reviewData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (res.data.acknowledged) {
+        toast.success("reviews added successfully!");
+        setIsReviewModalOpen(false);
+      }
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      toast.error(err.response?.data?.message || err.message);
+    }
+  };
+
+  const handleCancelBooking = async (bookingId, bookingDate) => {
+    const booking = moment(bookingDate);
+    const today = moment();
+    const daysDiff = booking.diff(today, "days");
+
+    if (daysDiff < 1) {
+      Swal.fire({
+        icon: "warning",
+        title: "Can't Cancel",
+        text: "You can only cancel bookings at least 1 day before the booked date.",
+      });
+      return;
+    }
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to cancel this booking?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, cancel it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const res = await axios.delete(
+          `http://localhost:3000/api/delete/booking/${bookingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.data.acknowledged) {
+          Swal.fire(
+            "Cancelled!",
+            "Your booking has been cancelled.",
+            "success"
+          );
+          queryClient.setQueryData(["myBooked"], (oldData) =>
+            oldData?.filter((b) => b.id !== bookingId)
+          );
+        } else {
+          Swal.fire("Failed", "Booking cancellation failed.", "error");
+        }
+      } catch (err) {
+        Swal.fire("Error", "Something went wrong.", "error");
+      }
+    }
+  };
 
   const canCancelBooking = (bookingDate) => {
     const booking = new Date(bookingDate);
@@ -109,9 +233,7 @@ const MyBookings = () => {
                               alt={booking.roomTitle}
                               className="w-12 h-12 object-cover rounded"
                             />
-                            <span className="font-medium">
-                              {booking.title}
-                            </span>
+                            <span className="font-medium">{booking.title}</span>
                           </div>
                         </td>
                         <td className="px-4 py-2">{booking.bookingDate}</td>
@@ -124,8 +246,8 @@ const MyBookings = () => {
                         <td className="px-4 py-2 space-x-2">
                           <button
                             onClick={() => {
-                              setSelectedBooking(booking);
                               setIsUpdateModalOpen(true);
+                              setSelectedBooking(booking);
                             }}
                             className="px-2 py-1 cursor-pointer  text-sm border rounded"
                           >
@@ -134,8 +256,8 @@ const MyBookings = () => {
 
                           <button
                             onClick={() => {
-                              setSelectedBooking(booking);
                               setIsReviewModalOpen(true);
+                              setSelectedBooking(booking);
                             }}
                             className="px-2 py-1 cursor-pointer  text-sm border rounded"
                           >
@@ -143,7 +265,12 @@ const MyBookings = () => {
                           </button>
 
                           <button
-                            onClick={() => handleCancelBooking(booking.id)}
+                            onClick={() =>
+                              handleCancelBooking(
+                                booking.id,
+                                booking.bookingDate
+                              )
+                            }
                             disabled={!canCancelBooking(booking.bookingDate)}
                             className="px-2 py-1 cursor-pointer text-sm border rounded text-red-600 dark:text-white disabled:opacity-50"
                           >
@@ -156,6 +283,8 @@ const MyBookings = () => {
                 </table>
               </div>
             </motion.div>
+          ) : isPending ? (
+            <LoadingSpinner />
           ) : (
             <motion.div
               initial={{ opacity: 0 }}
@@ -195,7 +324,7 @@ const MyBookings = () => {
                   type="date"
                   className="w-full border px-3 py-2 rounded mb-4"
                   value={newDate}
-                  min={new Date().toISOString().split("T")[0]}
+                  min={new Date()}
                   onChange={(e) => setNewDate(e.target.value)}
                 />
                 <button
@@ -229,24 +358,27 @@ const MyBookings = () => {
                 <label className="block mb-2">Rating (1–5)</label>
                 <input
                   type="number"
+                  required
                   min="1"
                   max="5"
                   className="w-full border px-3 py-2 rounded mb-4"
-                  value={review.rating}
+                  defaultValue={review.rating}
                   onChange={(e) =>
                     setReview({ ...review, rating: Number(e.target.value) })
                   }
                 />
-                <label className="block mb-2">Comment</label>
+                <label className="block mb-2">Comment:</label>
                 <textarea
                   rows={4}
                   className="w-full border px-3 py-2 rounded mb-4"
-                  value={review.comment}
+                  defaultValue={review.comment}
                   onChange={(e) =>
                     setReview({ ...review, comment: e.target.value })
                   }
                   placeholder="Share your experience..."
                 />
+                <label className="block mb-2">Name: {user?.displayName}</label>
+
                 <button
                   onClick={handleSubmitReview}
                   className="w-full cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"

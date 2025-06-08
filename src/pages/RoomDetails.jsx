@@ -8,6 +8,7 @@ import useRoomList from "../Hooks/useRoomList";
 import useGetReviews from "../Hooks/useGetReviews";
 import { toast } from "react-toastify";
 import axios from "axios";
+import moment from "moment";
 
 const RoomDetails = () => {
   const { user } = useAuth();
@@ -244,7 +245,7 @@ const RoomDetails = () => {
                         </div>
                       </div>
                       <span className="text-sm text-gray-500 dark:text-gray-200">
-                        {review.date}
+                        {moment(review.date).format("Do MMMM YYYY, h:mm:ss a")}
                       </span>
                     </div>
                     <p className="text-gray-600 dark:text-gray-200">
