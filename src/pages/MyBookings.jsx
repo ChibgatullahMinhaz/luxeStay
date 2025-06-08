@@ -87,7 +87,9 @@ const MyBookings = () => {
       roomId: selectedBooking._id,
       avatar: user?.photoURL,
       email: user?.email,
+      room: selectedBooking?.title,
     };
+console.log(reviewData)
     try {
       const res = await axios.post(
         "https://luxestayserver.vercel.app/give/review",
@@ -230,7 +232,7 @@ const MyBookings = () => {
                           <div className="flex items-center space-x-3">
                             <img
                               src={booking.image}
-                              alt={booking.roomTitle}
+                              alt={booking.title}
                               className="w-12 h-12 object-cover rounded"
                             />
                             <span className="font-medium">{booking.title}</span>

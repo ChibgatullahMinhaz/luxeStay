@@ -92,5 +92,4 @@ The goal is to create a **fully responsive, secure, and engaging platform** for 
 "cors"
 "express"
 "toastify"
-
 ```
