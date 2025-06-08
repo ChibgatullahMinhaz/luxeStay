@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import loadMyBookins from "../Service/getMyBookinsg";
 
 const mockBookings = [
   {
@@ -34,39 +36,25 @@ const MyBookings = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [review, setReview] = useState({ rating: 5, comment: "" });
 
+
+
+  const {data:myAllBookings} = useQuery({
+    queryKey: ['myBooked'],
+    queryFn : loadMyBookins
+  })
+
+  console.log(myAllBookings)
+
   const handleCancelBooking = (bookingId) => {
-    if (window.confirm("Are you sure you want to cancel this booking?")) {
-      setBookings((prev) => prev.filter((b) => b.id !== bookingId));
-      toast.success("Booking cancelled successfully");
-    }
+   
   };
 
   const handleUpdateDate = () => {
-    if (!newDate) {
-      toast.error("Please select a new date");
-      return;
-    }
-
-    setBookings((prev) =>
-      prev.map((b) =>
-        b.id === selectedBooking.id ? { ...b, bookingDate: newDate } : b
-      )
-    );
-
-    toast.success("Booking date updated successfully");
-    setIsUpdateModalOpen(false);
-    setNewDate("");
+    
   };
 
   const handleSubmitReview = () => {
-    if (!review.comment.trim()) {
-      toast.error("Please write a review comment");
-      return;
-    }
-
-    toast.success("Review submitted successfully");
-    setIsReviewModalOpen(false);
-    setReview({ rating: 5, comment: "" });
+   
   };
 
   const canCancelBooking = (bookingDate) => {

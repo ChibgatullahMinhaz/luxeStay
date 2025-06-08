@@ -49,11 +49,30 @@ const RoomDetails = () => {
     setIsBookingModalOpen(true);
   };
 
+  // id: "1",
+  //   roomId: "1",
+  //   roomTitle: "Presidential Suite",
+  //   roomImage:
+  //     "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=200",
+  //   price: 500,
+  //   bookingDate: "2024-02-15",
+  //   status: "confirmed",
+  // },
+
   const handleConfirmBooking = () => {
-    if (!selectedDate) {
+    const nowDate = selectedDate;
+    if (!nowDate) {
       toast.error("Please select a booking date");
       return;
     }
+
+    const romeBooked = {
+      bookingDate: nowDate,
+      roomId: id,
+      status: "confirmed",
+      email:user?.email
+    };
+    console.log(romeBooked);
     toast.success("Room booked successfully!");
     setIsBookingModalOpen(false);
     setSelectedDate("");
@@ -102,7 +121,9 @@ const RoomDetails = () => {
                 </p>
               </div>
 
-              <p className="text-gray-600 dark:text-gray-200">{room.description}</p>
+              <p className="text-gray-600 dark:text-gray-200">
+                {room.description}
+              </p>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
@@ -233,7 +254,9 @@ const RoomDetails = () => {
                         {review.date}
                       </span>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-200">{review.comment}</p>
+                    <p className="text-gray-600 dark:text-gray-200">
+                      {review.comment}
+                    </p>
                   </div>
                 ))}
               </div>
