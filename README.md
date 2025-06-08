@@ -5,6 +5,7 @@ Welcome to **LuxeStay**, a modern and interactive hotel booking web application 
 ---
 
 ## 🌐 Live Website
+
 🔗 [Visit LuxeStay](https://luxe-stay-hotel.web.app/)
 
 ---
@@ -20,58 +21,76 @@ The goal is to create a **fully responsive, secure, and engaging platform** for 
 ## 🧰 Technologies Used
 
 ### 🔧 Client Side
+
 - **React.js**
 - **Tailwind CSS**
 - **React Router**
 - **Framer Motion** – For animations
-- **React-Helmet-Async** – For meta title and description
-- **React Toastify / Sonner** – For toast notifications
+- **React-Helmet** – For meta title and description
+- **React Toastify** – For toast notifications
 - **Firebase Authentication** (Email/Password & Google login)
 - **JWT** – Token-based access control
 - **React Leaflet** – Map integration
+- **moment.js** – Date Piker
 - **Axios** – API Requests
+- **moment.js** – For booking and cancellation date checks
 
 ### 🔧 Server Side
+
 - **Express.js**
 - **Node.js**
 - **MongoDB + Mongoose**
 - **Cors**
 - **Dotenv**
-- **jsonwebtoken**
-- **moment.js** – For booking and cancellation date checks
 
 ---
 
 ## 🚀 Key Features
 
 ### 🔐 Authentication
+
 - Email/password-based login & registration
 - Google social login
 - JWT token for protected routes
 - Password validation with security checks
 - Toast notifications on auth events
 
-### 🧭 Navigation
-- Homepage, Rooms, My Bookings, Login/Register
-- Auth-based route protection for booking-related pages
+### Review System
 
+- user can review on booked rooms
+
+### Booking System
+
+- user can Booked any available rooms
+
+### filtering System
+
+- user can filter by price rang
+
+### Responsive UI / Dark Mode
+
+- Fully responsive (mobile + desktop)
+
+- Light/dark mode toggle
+
+### Listing
+- user can see her/his own booked rooms 
+- cancel booked room 
+- Update booked room.
 
 
 ```bash
 "axios"
 "react"
 "react-dom"
-"react-router-dom"
 "firebase"
-"jsonwebtoken"
-"react-helmet-async"
+"react-helmet"
 "framer-motion"
 "leaflet"
-"react-leaflet"
 "moment"
 "dotenv"
-"mongoose"
 "cors"
 "express"
-"toastify" 
- "sonner"
+"toastify"
+
+```
