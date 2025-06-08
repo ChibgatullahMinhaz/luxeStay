@@ -4,58 +4,40 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import loadMyBookins from "../Service/getMyBookinsg";
-
-const mockBookings = [
-  {
-    id: "1",
-    roomId: "1",
-    roomTitle: "Presidential Suite",
-    roomImage:
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=200",
-    price: 500,
-    bookingDate: "2024-02-15",
-    status: "confirmed",
-  },
-  {
-    id: "2",
-    roomId: "2",
-    roomTitle: "Ocean View Deluxe",
-    roomImage:
-      "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=200",
-    price: 350,
-    bookingDate: "2024-02-20",
-    status: "confirmed",
-  },
-];
+import useRoomList from "../Hooks/useRoomList";
 
 const MyBookings = () => {
-  const [bookings, setBookings] = useState(mockBookings);
+  const hotels = useRoomList();
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [review, setReview] = useState({ rating: 5, comment: "" });
 
+  const { data: myAllBookings } = useQuery({
+    queryKey: ["myBooked"],
+    queryFn: loadMyBookins,
+  });
+  console.log(myAllBookings);
 
+  const filterBookedRooms = hotels.filter((h) =>
+    myAllBookings?.some((b) => b.roomId === h.id)
+  );
+  const bookings = filterBookedRooms.map((room) => {
+    const booking = myAllBookings.find((b) => b.roomId === room.id);
+    return {
+      ...room,
+      bookingDate: booking?.bookingDate,
+      status: booking?.status,
+    };
+  });
+  
 
-  const {data:myAllBookings} = useQuery({
-    queryKey: ['myBooked'],
-    queryFn : loadMyBookins
-  })
+  const handleCancelBooking = (bookingId) => {};
 
-  console.log(myAllBookings)
+  const handleUpdateDate = () => {};
 
-  const handleCancelBooking = (bookingId) => {
-   
-  };
-
-  const handleUpdateDate = () => {
-    
-  };
-
-  const handleSubmitReview = () => {
-   
-  };
+  const handleSubmitReview = () => {};
 
   const canCancelBooking = (bookingDate) => {
     const booking = new Date(bookingDate);
@@ -91,7 +73,9 @@ const MyBookings = () => {
             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-200 mb-2">
               My Bookings
             </h1>
-            <p className="text-gray-600 dark:text-gray-200">Manage your hotel reservations</p>
+            <p className="text-gray-600 dark:text-gray-200">
+              Manage your hotel reservations
+            </p>
           </motion.div>
 
           {bookings.length > 0 ? (
@@ -121,12 +105,12 @@ const MyBookings = () => {
                         <td className="px-4 py-2">
                           <div className="flex items-center space-x-3">
                             <img
-                              src={booking.roomImage}
+                              src={booking.image}
                               alt={booking.roomTitle}
                               className="w-12 h-12 object-cover rounded"
                             />
                             <span className="font-medium">
-                              {booking.roomTitle}
+                              {booking.title}
                             </span>
                           </div>
                         </td>
@@ -176,7 +160,7 @@ const MyBookings = () => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-white shadow rounded-lg p-8 text-center"
+              className="bg-white dark:bg-gray-700 shadow rounded-lg p-8 text-center"
             >
               <h3 className="text-lg font-semibold mb-2">No Bookings Found</h3>
               <p className="text-gray-600 mb-4">
