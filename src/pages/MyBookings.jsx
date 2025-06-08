@@ -51,7 +51,7 @@ const MyBookings = () => {
     };
     try {
       const res = await axios.patch(
-        "http://localhost:3000/booking/date/update",
+        "https://luxestayserver.vercel.app/booking/date/update",
         updateExistingDate,
         {
           headers: {
@@ -90,7 +90,7 @@ const MyBookings = () => {
     };
     try {
       const res = await axios.post(
-        "http://localhost:3000/give/review",
+        "https://luxestayserver.vercel.app/give/review",
         reviewData,
         {
           headers: {
@@ -137,7 +137,7 @@ const MyBookings = () => {
     if (result.isConfirmed) {
       try {
         const res = await axios.delete(
-          `http://localhost:3000/api/delete/booking/${bookingId}`,
+          `https://luxestayserver.vercel.app/api/delete/booking/${bookingId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -11,7 +11,7 @@ const loadMyBookins = async () => {
     const email = user?.email
 
 
-    const res = await axios.get(`http://localhost:3000/rooms/myBookings?email=${email}`, {
+    const res = await axios.get(`https://luxestayserver.vercel.app/rooms/myBookings?email=${email}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }

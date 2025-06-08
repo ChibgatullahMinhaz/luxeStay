@@ -46,7 +46,7 @@ const RoomDetails = () => {
     try {
       const token = user?.accessToken;
       const res = await axios.post(
-        "http://localhost:3000/room/bookings",
+        "https://luxestayserver.vercel.app/room/bookings",
         bookingData,
         {
           headers: {
