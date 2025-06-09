@@ -1,95 +1,127 @@
-# 🏨 LuxeStay - Hotel Booking Platform
+# 🏨 LuxeStay - A Modern Hotel Booking Platform
 
-Welcome to **LuxeStay**, a modern and interactive hotel booking web application built to deliver a seamless experience for users looking to discover, review, and book hotel rooms with ease.
-
----
+Welcome to **LuxeStay**, a sleek and modern hotel booking platform where users can effortlessly discover, explore, and book rooms. Designed with user experience and responsiveness in mind, Hotel Haven ensures trust, security, and ease throughout the booking journey.
 
 ## 🌐 Live Website
 
-🔗 [Visit LuxeStay](https://luxe-stay-hotel.web.app/)
-
----
+## 🔗 [Visit LuxeStay](https://luxe-stay-hotel.web.app/)
 
 ## 🎯 Project Purpose
 
-This project is part of **Assignment-11** (Assignment Category: `assignment_category_03`). It demonstrates proficiency in building a full-stack MERN application with authentication, CRUD operations, secure API handling, user experience design, and deployment.
-
-The goal is to create a **fully responsive, secure, and engaging platform** for hotel bookings that showcases both technical and UI/UX design skills.
+To build a full-stack hotel booking system with secure authentication, real-time room availability, user reviews, date-based booking, and dynamic room filtering — all with a polished UI to attract recruiters and real users alike.
 
 ---
 
-## 🧰 Technologies Used
+## 🔑 Key Features
 
-### 🔧 Client Side
+### ✅ General
 
-- **React.js**
-- **Tailwind CSS**
-- **React Router**
-- **Framer Motion** – For animations
-- **React-Helmet** – For meta title and description
-- **React Toastify** – For toast notifications
-- **Firebase Authentication** (Email/Password & Google login)
-- **JWT** – Token-based access control
-- **React Leaflet** – Map integration
-- **moment.js** – Date Piker
-- **Axios** – API Requests
-- **moment.js** – For booking and cancellation date checks
+- Fully responsive on **mobile**, **tablet**, and **desktop**
+- Clean, recruiter-friendly design with excellent spacing and visual contrast
+- Error handling with meaningful toasts and fallbacks
+- Protected routes using Firebase Access Token or JWT
+- 404 page with gif and back-to-home button
 
-### 🔧 Server Side
+### 🏠 Homepage
 
-- **Express.js**
-- **Node.js**
-- **MongoDB + Mongoose**
-- **Cors**
-- **Dotenv**
+- Animated banner with CTA to Rooms page
+- Interactive map using **React Leaflet**
+- Featured top-rated rooms from real-time database
+- Customer testimonials (sorted by latest reviews)
+- Special Offer modal on landing
+- Extra Sections:
+  - Amenities Showcase
+  - Newsletter Signup Section
+  - Review Stats & Recommendation
+  - Promotional Offers
 
----
+### 🧭 Navigation
 
-## 🚀 Key Features
+- Links to **Rooms**, **My Bookings**, and **Login/Register**
+- Protected routes: "My Bookings" requires authentication
 
 ### 🔐 Authentication
 
-- Email/password-based login & registration
-- Google social login
-- JWT token for protected routes
-- Password validation with security checks
-- Toast notifications on auth events
+- Firebase Email/Password login & registration
+- Google login integration
+- Strong password validation & sweetalert on success
+- Firebase token stored and used for route protection
 
-### Review System
+### 🛏️ Rooms Page
 
-- user can review on booked rooms
+- Fetches rooms from MongoDB
+- Server-side price range filtering
+- View total & average reviews per room
+- Click on card redirects to room details page
 
-### Booking System
+### 📄 Room Details Page
 
-- user can Booked any available rooms
+- Complete room info
+- All user reviews listed
+- Review modal for booked users
+- Book Now → shows modal with booking summary & date picker
+- Room becomes unavailable after booking
 
-### filtering System
+### 📆 My Bookings
 
-- user can filter by price rang
+- Only shows bookings of logged-in user
+- Allows canceling bookings (before 1 day of date)
+- Cancelled rooms become available again
+- Update Booking Date feature
+- Post-review modal (once per booking)
 
-### Responsive UI / Dark Mode
+### 📝 Reviews
 
-- Fully responsive (mobile + desktop)
+- Only users who booked can post reviews
+- Rating: 1-5 stars
+- Displays reviewer name, date, rating, and comment
+- Reviews sorted descending by date
 
-- Light/dark mode toggle
+---
 
-### Listing
-- user can see her/his own booked rooms 
-- cancel booked room 
-- Update booked room.
+## 🧩 Packages Used
+
+- `react-router-dom`
+- `firebase`
+- `jsonwebtoken` (JWT)
+- `axios`
+- `react-hook-form`
+- `sweetalert2`
+- `framer-motion`
+- `react-leaflet`
+- `moment`
+- `react-icons`
+- `react-hot-toast`
+- `@headlessui/react`
+- `@heroicons/react`
+
+---
+
+## 🛠️ Technologies
+
+- **React.js** (Client)
+- **Node.js** + **Express.js** (Server)
+- **MongoDB** (Database)
+- **Firebase Authentication**
+- **Tailwind CSS** (Styling)
+
+---
 
 
-```bash
-"axios"
-"react"
-"react-dom"
-"firebase"
-"react-helmet"
-"framer-motion"
-"leaflet"
-"moment"
-"dotenv"
-"cors"
-"express"
-"toastify"
-```
+
+---
+
+## 📌 Developer Notes
+
+- Booking cancellation is allowed until 1 day before booking date.
+- Server-side filter ensures performance and consistency.
+- Newsletter section and special offers build user trust.
+- All forms and modals have proper validation and UX.
+
+---
+
+## ❤️ Credits
+
+Built with ❤️ by [chibgatullah Minhaz]
+
+---

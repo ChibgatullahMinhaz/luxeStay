@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useRoomList from "../Hooks/useRoomList";
 import useGetReviews from "../Hooks/useGetReviews";
 import { Star } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Rooms = () => {
   const hotels = useRoomList();
@@ -13,7 +14,6 @@ const Rooms = () => {
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [filteredRooms, setFilteredRooms] = useState([]);
 
-  // ✅ Update filtered rooms when hotels data changes
   useEffect(() => {
     if (hotels && Array.isArray(hotels)) {
       setFilteredRooms(hotels);
@@ -21,14 +21,16 @@ const Rooms = () => {
   }, [hotels]);
 
   // ✅ Filter based on price range
-  const handlePriceFilter = () => {
-    const min = parseInt(priceRange.min) || 0;
-    const max = parseInt(priceRange.max) || Infinity;
-
-    const filtered = hotels.filter(
-      (room) => room.price >= min && room.price <= max
-    );
-    setFilteredRooms(filtered);
+  const handlePriceFilter = async () => {
+    try {
+      const res = await fetch(
+        `https://luxestayserver.vercel.app/rooms?min=${priceRange?.min}&max=${priceRange?.max}`
+      );
+      const data = await res.json();
+      setFilteredRooms(data);
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   const resetFilter = () => {
