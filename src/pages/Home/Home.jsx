@@ -7,12 +7,11 @@ import UserReviews from "../../Components/UserReviews";
 import Amenities from "../../Components/Amenities";
 import HotelMap from "../../Components/HotelMap";
 import OfferModal from "../../Components/OfferModal";
-import { useLocation } from "react-router";
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
 
-  
+
   useEffect(() => {
     const hasSeen = sessionStorage.getItem("seenModal");
     if (!hasSeen) {

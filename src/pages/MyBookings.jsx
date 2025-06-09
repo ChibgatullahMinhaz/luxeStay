@@ -10,15 +10,24 @@ import axios from "axios";
 import LoadingSpinner from "../Components/LoadingSpiner";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { DateRange } from "react-date-range";
 
 const MyBookings = () => {
   const { user } = useAuth();
   const hotels = useRoomList();
-  const [newDate, setNewDate] = useState("");
+  const [newDate, setNewDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [review, setReview] = useState({ rating: 0, comment: "" });
+
   const queryClient = useQueryClient();
 
   const token = user?.accessToken;
@@ -35,7 +44,12 @@ const MyBookings = () => {
     const booking = myAllBookings.find((b) => b.roomId === room.id);
     return {
       ...room,
-      bookingDate: booking?.bookingDate,
+      endDate: booking?.endDate,
+      startDate: booking?.startDate,
+      bookingDate: {
+        endDate: booking?.endDate,
+        startDate: booking?.startDate,
+      },
       status: booking?.status,
     };
   });
@@ -112,11 +126,13 @@ const MyBookings = () => {
   };
 
   const handleCancelBooking = async (bookingId, bookingDate) => {
-    const booking = moment(bookingDate);
-    const today = moment();
-    const daysDiff = booking.diff(today, "days");
+    const start = moment(bookingDate?.startDate).startOf("day");
+    const end = moment(bookingDate?.endDate).startOf("day");
+    const today = moment().startOf("day");
+    const bookingDuration = end.diff(start, "days") + 1;
+    const daysUntilStart = start.diff(today, "days");
 
-    if (daysDiff < 1) {
+    if (bookingDuration <= 1) {
       Swal.fire({
         icon: "warning",
         title: "Can't Cancel",
@@ -125,6 +141,16 @@ const MyBookings = () => {
       return;
     }
 
+    // if (daysUntilStart <= 1) {
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Can't Cancel",
+    //     text: "You may cancel the booking only if the booking duration is one day or longer.",
+    //   });
+    //   return;
+    // }
+
+    
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to cancel this booking?",
@@ -162,14 +188,6 @@ const MyBookings = () => {
         Swal.fire("Error", "Something went wrong.", "error");
       }
     }
-  };
-
-  const canCancelBooking = (bookingDate) => {
-    const booking = new Date(bookingDate);
-    const today = new Date();
-    const timeDiff = booking.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    return daysDiff >= 1;
   };
 
   return (
@@ -253,7 +271,14 @@ const MyBookings = () => {
                             <span className="font-medium">{booking.title}</span>
                           </div>
                         </th>
-                        <td className="px-6 py-4 ml-2">{booking.bookingDate}</td>
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-gray-400"
+                        >
+                          {`${moment(booking?.startDate).format(
+                            "D MMMM"
+                          )} - ${moment(booking?.endDate).format("D MMMM")}`}
+                        </th>
                         <td className="px-6 py-4">${booking.price}</td>
                         <td className="px-6 py-4">
                           <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
@@ -288,7 +313,7 @@ const MyBookings = () => {
                                 booking.bookingDate
                               )
                             }
-                            disabled={!canCancelBooking(booking.bookingDate)}
+                            // disabled={!canCancelBooking(booking.bookingDate)}
                             className="px-2 py-1 cursor-pointer text-sm border rounded text-red-600 dark:text-white disabled:opacity-50"
                           >
                             Cancel
@@ -337,13 +362,14 @@ const MyBookings = () => {
                   Update Booking Date
                 </h2>
                 <label className="block mb-2">New Date</label>
-                <input
-                  type="date"
-                  className="w-full border px-3 py-2 rounded mb-4"
-                  value={newDate}
-                  min={new Date()}
-                  onChange={(e) => setNewDate(e.target.value)}
+
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item) => setNewDate([item.selection])}
+                  moveRangeOnFirstSelection={false}
+                  ranges={newDate}
                 />
+
                 <button
                   onClick={handleUpdateDate}
                   className="w-full cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"
@@ -379,7 +405,7 @@ const MyBookings = () => {
                   min="1"
                   max="5"
                   className="w-full border px-3 py-2 rounded mb-4"
-                  defaultValue={review.rating}
+                  value={review.rating}
                   onChange={(e) =>
                     setReview({ ...review, rating: Number(e.target.value) })
                   }

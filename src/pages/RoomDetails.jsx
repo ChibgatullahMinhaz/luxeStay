@@ -9,7 +9,9 @@ import useGetReviews from "../Hooks/useGetReviews";
 import { toast } from "react-toastify";
 import axios from "axios";
 import moment from "moment";
-
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 const RoomDetails = () => {
   const { user } = useAuth();
   const hotels = useRoomList();
@@ -17,7 +19,14 @@ const RoomDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState([
+    {
+      startDate: new Date(),
+      endDate: null,
+      key: "selection",
+    },
+  ]);
+
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const room = hotels.find((r) => r.id === id);
@@ -37,15 +46,17 @@ const RoomDetails = () => {
     }
 
     const bookingData = {
-      bookingDate: selectedDate,
       roomId: id,
       status: "confirmed",
       email: user?.email,
+      startDate: selectedDate[0].startDate,
+      endDate: selectedDate[0].endDate,
     };
-
+    console.log(bookingData);
     try {
       const token = user?.accessToken;
       const res = await axios.post(
+        // "https://luxestayserver.vercel.app/room/bookings",
         "https://luxestayserver.vercel.app/room/bookings",
         bookingData,
         {
@@ -159,7 +170,7 @@ const RoomDetails = () => {
 
               {/* Booking Modal */}
               {isBookingModalOpen && (
-                <div className="fixed inset-0  bg-opacity-30 flex items-center justify-center z-50">
+                <div className="fixed inset-0  overflow-auto bg-opacity-30 flex items-center justify-center z-50">
                   <div className="bg-white dark:bg-gray-700 p-6 rounded-lg w-full max-w-md space-y-4">
                     <h2 className="text-xl font-bold">Book {room.title}</h2>
 
@@ -170,13 +181,11 @@ const RoomDetails = () => {
                       >
                         Select Date
                       </label>
-                      <input
-                        id="date"
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                        min={new Date().toISOString().split("T")[0]}
-                        className="w-full border border-gray-300 p-2 rounded"
+                      <DateRange
+                        editableDateInputs={true}
+                        onChange={(item) => setSelectedDate([item.selection])}
+                        moveRangeOnFirstSelection={false}
+                        ranges={selectedDate}
                       />
                     </div>
 
@@ -191,7 +200,15 @@ const RoomDetails = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Date:</span>
-                        <span>{selectedDate || "Not selected"}</span>
+                        {selectedDate[0]?.startDate &&
+                        selectedDate[0]?.endDate ? (
+                          <span>
+                            {moment(selectedDate[0].startDate).format("MMM Do")}{" "}
+                            - {moment(selectedDate[0].endDate).format("MMM Do")}
+                          </span>
+                        ) : (
+                          <span>Not selected</span>
+                        )}
                       </div>
                       <div className="flex justify-between font-semibold border-t pt-2">
                         <span>Total:</span>
