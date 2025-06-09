@@ -18,7 +18,7 @@ const RoomDetails = () => {
   const reviews = useGetReviews();
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState([
     {
       startDate: new Date(),
@@ -52,11 +52,10 @@ const RoomDetails = () => {
       startDate: selectedDate[0].startDate,
       endDate: selectedDate[0].endDate,
     };
-    console.log(bookingData);
     try {
+      setLoading(true);
       const token = user?.accessToken;
       const res = await axios.post(
-        // "https://luxestayserver.vercel.app/room/bookings",
         "https://luxestayserver.vercel.app/room/bookings",
         bookingData,
         {
@@ -75,6 +74,8 @@ const RoomDetails = () => {
     } catch (err) {
       console.error(err.response?.data || err.message);
       toast.error(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -221,7 +222,7 @@ const RoomDetails = () => {
                         onClick={handleConfirmBooking}
                         className="bg-blue-600 text-white px-4 py-2 rounded w-full"
                       >
-                        Confirm
+                        {loading ? "Confirming" : "Confirm"}
                       </button>
                       <button
                         onClick={() => setIsBookingModalOpen(false)}

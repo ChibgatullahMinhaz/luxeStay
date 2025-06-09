@@ -27,7 +27,7 @@ const MyBookings = () => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [review, setReview] = useState({ rating: 0, comment: "" });
-
+  const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const token = user?.accessToken;
@@ -64,6 +64,7 @@ const MyBookings = () => {
       email: user?.email,
     };
     try {
+      setLoading(true);
       const res = await axios.patch(
         "https://luxestayserver.vercel.app/booking/date/update",
         updateExistingDate,
@@ -82,6 +83,8 @@ const MyBookings = () => {
     } catch (err) {
       console.error(err.response?.data || err.message);
       toast.error(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -104,6 +107,7 @@ const MyBookings = () => {
       room: selectedBooking?.title,
     };
     try {
+      setLoading(true);
       const res = await axios.post(
         "https://luxestayserver.vercel.app/give/review",
         reviewData,
@@ -118,10 +122,13 @@ const MyBookings = () => {
       if (res.data.acknowledged) {
         toast.success("reviews added successfully!");
         setIsReviewModalOpen(false);
+        setReview({ rating: 0, comment: "" });
       }
     } catch (err) {
       console.error(err.response?.data || err.message);
       toast.error(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,7 +157,6 @@ const MyBookings = () => {
     //   return;
     // }
 
-    
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to cancel this booking?",
@@ -374,7 +380,7 @@ const MyBookings = () => {
                   onClick={handleUpdateDate}
                   className="w-full cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"
                 >
-                  Update
+                  {loading ? "Updating" : "Update"}
                 </button>
                 <button
                   onClick={() => setIsUpdateModalOpen(false)}
@@ -426,7 +432,7 @@ const MyBookings = () => {
                   onClick={handleSubmitReview}
                   className="w-full cursor-pointer bg-blue-600 text-white px-4 py-2 rounded"
                 >
-                  Submit Review
+                  {loading ? "Submitting" : "Submit Review"}
                 </button>
                 <button
                   onClick={() => setIsReviewModalOpen(false)}
