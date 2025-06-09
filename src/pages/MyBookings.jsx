@@ -89,7 +89,6 @@ const MyBookings = () => {
       email: user?.email,
       room: selectedBooking?.title,
     };
-    console.log(reviewData);
     try {
       const res = await axios.post(
         "https://luxestayserver.vercel.app/give/review",

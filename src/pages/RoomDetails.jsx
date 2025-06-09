@@ -55,7 +55,6 @@ const RoomDetails = () => {
           },
         }
       );
-      console.log(res.data);
       if (res.data.acknowledged) {
         toast.success("Booking successful!");
         setIsBookingModalOpen(false);
