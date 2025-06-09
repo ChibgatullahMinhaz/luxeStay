@@ -4,7 +4,7 @@ import validatePassword from "../../Utilities/passVerification";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../Service/Firebase.init";
 
 const Register = () => {
@@ -14,57 +14,63 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigate();
 
-
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    const formData = new FormData(e.target);
-    const { name, photoURL, password, confirmPassword } = Object.fromEntries(
-      formData.entries()
-    );
-    const email = formData.get("email").trim();
-    console.log(name, email, password);
+    try {
+      const formData = new FormData(e.target);
+      const { name, photoURL, password, confirmPassword } = Object.fromEntries(
+        formData.entries()
+      );
+      const email = formData.get("email").trim();
 
-    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    if (!name || !email || !password) {
-      throw new Error("Please fill in all required fields");
-    }
+      if (!name || !email || !password) {
+        throw new Error("Please fill in all required fields");
+      }
 
-    if (!isValidEmail(email)) {
-      throw new Error("Please enter a valid email address.");
-    }
+      if (!isValidEmail(email)) {
+        throw new Error("Please enter a valid email address.");
+      }
 
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      throw new Error(passwordError);
-    }
+      const passwordError = validatePassword(password);
+      if (passwordError) {
+        throw new Error(passwordError);
+      }
 
-    if (password !== confirmPassword) {
-      throw new Error("Passwords do not match");
-    }
+      if (password !== confirmPassword) {
+        throw new Error("Passwords do not match");
+      }
 
-    const result = await createUserWithEmailAndPassword(auth, email, password);
-
-    if (result) {
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Account created successfully",
-        showConfirmButton: false,
-        timer: 1500,
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photoURL,
       });
 
-      navigation("/");
+      if (result) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Account created successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        navigation("/");
+      }
+    } catch (error) {
+      toast.error(error.message || "Registration failed");
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    toast.error(error.message || "Registration failed");
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   const handleGoogleSignup = async () => {
     await loginWithGoogle();
@@ -75,7 +81,7 @@ const Register = () => {
       showConfirmButton: false,
       timer: 1500,
     });
-     navigation("/");
+    navigation("/");
   };
 
   return (

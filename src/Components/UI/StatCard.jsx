@@ -13,7 +13,7 @@ const StatCard = ({ label, value }) => (
         viewport={{ once: false }}
         className="flex items-center justify-center"
       >
-        <StarRating rating={5} />
+        <StarRating rating={value} />
       </motion.div>
     )}
     <div className="text-sm text-gray-600 dark:text-gray-200">{label}</div>

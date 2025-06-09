@@ -89,7 +89,7 @@ const MyBookings = () => {
       email: user?.email,
       room: selectedBooking?.title,
     };
-console.log(reviewData)
+    console.log(reviewData);
     try {
       const res = await axios.post(
         "https://luxestayserver.vercel.app/give/review",
@@ -214,21 +214,37 @@ console.log(reviewData)
               <div className="p-4 border-b">
                 <h2 className="text-xl font-semibold">Your Reservations</h2>
               </div>
-              <div className="p-4 overflow-x-auto">
-                <table className="min-w-full table-auto">
-                  <thead>
-                    <tr>
-                      <th className="text-left px-4 py-2">Room</th>
-                      <th className="text-left px-4 py-2">Date</th>
-                      <th className="text-left px-4 py-2">Price</th>
-                      <th className="text-left px-4 py-2">Status</th>
-                      <th className="text-left px-4 py-2">Actions</th>
+              <div className="p-4 relative overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 py-3">
+                    <tr className=" ">
+                      <th scope="col" className="px-6 py-3">
+                        Room
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Price
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Status
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Actions
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {bookings.map((booking) => (
-                      <tr key={booking.id} className="border-t">
-                        <td className="px-4 py-2">
+                      <tr
+                        key={booking.id}
+                        class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
+                      >
+                        <th
+                          scope="row"
+                          className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
                           <div className="flex items-center space-x-3">
                             <img
                               src={booking.image}
@@ -237,15 +253,15 @@ console.log(reviewData)
                             />
                             <span className="font-medium">{booking.title}</span>
                           </div>
-                        </td>
-                        <td className="px-4 py-2">{booking.bookingDate}</td>
-                        <td className="px-4 py-2">${booking.price}</td>
-                        <td className="px-4 py-2">
+                        </th>
+                        <td className="px-6 py-4 ml-2">{booking.bookingDate}</td>
+                        <td className="px-6 py-4">${booking.price}</td>
+                        <td className="px-6 py-4">
                           <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
                             {booking.status}
                           </span>
                         </td>
-                        <td className="px-4 py-2 space-x-2">
+                        <td className="px-4 py-2 space-y-3 sm:space-x-2">
                           <button
                             onClick={() => {
                               setIsUpdateModalOpen(true);

@@ -88,7 +88,9 @@ const Rooms = () => {
               </div>
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">{room.title}</h2>
-                <p className="text-sm text-gray-600 mb-2 dark:text-gray-200">{room.description}</p>
+                <p className="text-sm text-gray-600 mb-2 dark:text-gray-200">
+                  {room.description}
+                </p>
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-1">
                     {averageRating(room.id)}
@@ -122,21 +124,40 @@ const Rooms = () => {
   );
 
   const TableView = () => (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white dark:bg-gray-800 border rounded shadow-sm">
-        <thead className="bg-gray-100 dark:bg-gray-600 dark:text-gray-200">
+    <div className="relative overflow-x-auto">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
           <tr>
-            <th className="p-3 text-left">Room</th>
-            <th className="p-3 text-left">Price</th>
-            <th className="p-3 text-left">Capacity</th>
-            <th className="p-3 text-left">Rating</th>
-            <th className="p-3 text-left">Action</th>
+            <th scope="col" className="px-6 py-3">
+              Room
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Price
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Capacity
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Rating
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
           {filteredRooms.map((room) => (
-            <tr key={room.id} className="border-t">
-              <td className="p-3">
+            <tr
+              key={room?.id}
+              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
+            >
+              {/* <td className="p-3">
+                
+              </td> */}
+              <th
+                scope="row"
+                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
                 <div className="flex items-center gap-3">
                   <img
                     src={room.image}
@@ -150,16 +171,16 @@ const Rooms = () => {
                     </div>
                   </div>
                 </div>
-              </td>
-              <td className="p-3">${room.price}/night</td>
-              <td className="p-3">{room.capacity} guests</td>
-              <td className="p-3">
+              </th>
+
+              <td className="px-6 py-4">${room.price}/night</td>
+              <td className="px-6 py-4">{room.capacity} guests</td>
+              <td className="px-6 py-4">
                 <span className="text-xs flex text-gray-500">
-                 {averageRating(room.id)}
-                  ({ renderTotalReview (room.id)})
+                  {averageRating(room.id)}({renderTotalReview(room.id)})
                 </span>
               </td>
-              <td className="p-3">
+              <td class="px-6 py-4">
                 <Link to={`/roomsDetails/${room.id}`}>
                   <button className="bg-blue-600 cursor-pointer text-white px-3 py-1 rounded hover:bg-blue-700 text-sm">
                     View Details

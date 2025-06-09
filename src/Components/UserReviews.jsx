@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
 import CountUp from "react-countup";
 import axios from "axios";
-import Slider from "react-slick";   
+import Slider from "react-slick";
 import ReviewCard from "./UI/ReviewCard";
 import StatCard from "./UI/StatCard";
 
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const UserReviews = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true }); 
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,8 +22,7 @@ const UserReviews = () => {
         const { data } = await axios.get(
           "https://luxestayserver.vercel.app/all/reviews"
         );
-        const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-        setReviews(sorted);
+        setReviews(data);
       } catch (error) {
         console.error("Error fetching reviews:", error);
       } finally {
@@ -36,25 +37,33 @@ const UserReviews = () => {
     dots: true,
     infinite: true,
     speed: 200,
-    slidesToShow: 3,       
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
     responsive: [
       {
-        breakpoint: 1024,   
+        breakpoint: 1024,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 640,    
+        breakpoint: 640,
         settings: {
           slidesToShow: 1,
         },
       },
     ],
   };
+  const totalRating = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
+  const avgRating = totalRating / reviews.length;
+
+  const totalReviews = reviews.length;
+  const recommendedCount = reviews.filter((r) => Number(r.rating) >= 4).length;
+
+  const recommendedPercentage =
+    totalReviews > 0 ? ((recommendedCount / totalReviews) * 100).toFixed(1) : 0;
 
   return (
     <section className="py-20 overflow-hidden bg-gradient-to-b from-white to-blue-50 dark:bg-gray-700 dark:bg-none">
@@ -78,7 +87,6 @@ const UserReviews = () => {
           </p>
         </motion.div>
 
-      
         {loading ? (
           <div className="text-center text-lg text-gray-600 dark:text-gray-200">
             Loading reviews...
@@ -86,16 +94,21 @@ const UserReviews = () => {
         ) : (
           // Use react-slick Slider instead of grid
           <Slider {...settings}>
-            {reviews.map((review, index) => (
-              <div key={review.id} className="px-4">
-                <ReviewCard review={review} index={index} />
-              </div>
-            ))}
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <div key={review.id} className="px-4">
+                  <ReviewCard review={review} index={index} />
+                </div>
+              ))
+            ) : (
+              <p>No Review Available</p>
+            )}
           </Slider>
         )}
 
         {/* Stats Section */}
         <motion.div
+          ref={ref}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
@@ -103,17 +116,33 @@ const UserReviews = () => {
         >
           <div className="bg-gradient-to-r from-primary-50 to-blue-50 dark:bg-gray-700 dark:bg-none rounded-xl p-8 inline-block">
             <div className="flex items-center justify-center space-x-8">
-              <StatCard label="Average Rating" value="4.8" />
-              <StatCard
-                label="Total Reviews"
-                value={<CountUp duration={10} end={1247} />}
-              />
+              <StatCard label="Average Rating" value={avgRating} />
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+              >
+                <StatCard
+                  label="Total Reviews"
+                  value={
+                    isInView ? (
+                      <CountUp duration={10} end={reviews.length} />
+                    ) : (
+                      0
+                    )
+                  }
+                />
+              </motion.div>
               <StatCard
                 label="Recommend Us"
                 value={
-                  <>
-                    <CountUp duration={20} end={96} />%
-                  </>
+                  isInView ? (
+                    <>
+                      <CountUp duration={20} end={recommendedPercentage} />%
+                    </>
+                  ) : (
+                    "0%"
+                  )
                 }
               />
             </div>
