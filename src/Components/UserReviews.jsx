@@ -57,7 +57,7 @@ const UserReviews = () => {
     ],
   };
   const totalRating = reviews.reduce((sum, r) => sum + Number(r.rating), 0);
-  const avgRating = totalRating / reviews.length;
+  const avgRating = (totalRating / reviews.length).toFixed(1);
 
   const totalReviews = reviews.length;
   const recommendedCount = reviews.filter((r) => Number(r.rating) >= 4).length;
