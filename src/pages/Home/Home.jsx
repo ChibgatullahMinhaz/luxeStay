@@ -11,9 +11,14 @@ import { useLocation } from "react-router";
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
-  const location = useLocation();
+
+  
   useEffect(() => {
-    setShowModal(true);
+    const hasSeen = sessionStorage.getItem("seenModal");
+    if (!hasSeen) {
+      setShowModal(true);
+      sessionStorage.setItem("seenModal", "true");
+    }
   }, []);
 
   return (
