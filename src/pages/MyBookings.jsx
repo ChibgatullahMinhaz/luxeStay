@@ -175,6 +175,9 @@ const MyBookings = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            data: {
+              bookingDate,
+            },
           }
         );
 
@@ -191,7 +194,7 @@ const MyBookings = () => {
           Swal.fire("Failed", "Booking cancellation failed.", "error");
         }
       } catch (err) {
-        Swal.fire("Error", "Something went wrong.", "error");
+        Swal.fire(err.message);
       }
     }
   };
@@ -319,7 +322,6 @@ const MyBookings = () => {
                                 booking.bookingDate
                               )
                             }
-                            // disabled={!canCancelBooking(booking.bookingDate)}
                             className="px-2 py-1 cursor-pointer text-sm border rounded text-red-600 dark:text-white disabled:opacity-50"
                           >
                             Cancel
