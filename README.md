@@ -68,7 +68,7 @@ To build a full-stack hotel booking system with secure authentication, real-time
 - Allows canceling bookings (before 1 day of date)
 - Cancelled rooms become available again
 - Update Booking Date feature
-- Post-review modal (once per booking)
+- Post-review modal
 
 ### 📝 Reviews
 
@@ -83,7 +83,6 @@ To build a full-stack hotel booking system with secure authentication, real-time
 
 - `react-router-dom`
 - `firebase`
-- `jsonwebtoken` (JWT)
 - `axios`
 - `react-hook-form`
 - `sweetalert2`
@@ -91,9 +90,18 @@ To build a full-stack hotel booking system with secure authentication, real-time
 - `react-leaflet`
 - `moment`
 - `react-icons`
-- `react-hot-toast`
-- `@headlessui/react`
-- `@heroicons/react`
+- `react-toastify`
+- `axios`
+- `date-fns`
+- `lottie-react`
+- `react-countup`
+- `lucide-react`
+- `lucide-react`
+- `react-date-range`
+- `react-helmet`
+- `slick-carouse`
+- `react-slick`
+
 
 ---
 

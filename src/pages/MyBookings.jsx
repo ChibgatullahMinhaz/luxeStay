@@ -11,6 +11,7 @@ import LoadingSpinner from "../Components/LoadingSpiner";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { DateRange } from "react-date-range";
+import { startOfDay, endOfMonth } from "date-fns";
 
 const MyBookings = () => {
   const { user } = useAuth();
@@ -78,6 +79,7 @@ const MyBookings = () => {
 
       if (res.data.acknowledged) {
         toast.success("Booking Date Update successfully!");
+        queryClient.invalidateQueries(["myBooked"]);
         setIsUpdateModalOpen(false);
       }
     } catch (err) {
@@ -187,9 +189,7 @@ const MyBookings = () => {
             "Your booking has been cancelled.",
             "success"
           );
-          queryClient.setQueryData(["myBooked"], (oldData) =>
-            oldData?.filter((b) => b.id !== bookingId)
-          );
+          queryClient.invalidateQueries(["myBooked"]);
         } else {
           Swal.fire("Failed", "Booking cancellation failed.", "error");
         }
@@ -376,6 +376,8 @@ const MyBookings = () => {
                   onChange={(item) => setNewDate([item.selection])}
                   moveRangeOnFirstSelection={false}
                   ranges={newDate}
+                  minDate={startOfDay(new Date())}
+                  maxDate={endOfMonth(new Date())}
                 />
 
                 <button
