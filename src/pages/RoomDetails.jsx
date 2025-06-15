@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { motion } from "framer-motion";
 import { MapPin, Users, Star } from "lucide-react";
 import useAuth from "../Hooks/useAuth";
-import useRoomList from "../Hooks/useRoomList";
 import useGetReviews from "../Hooks/useGetReviews";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -12,11 +11,14 @@ import moment from "moment";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import useRoomDetails from "../Hooks/useRoomDetails";
 const RoomDetails = () => {
-  const { user } = useAuth();
-  const hotels = useRoomList();
-  const reviews = useGetReviews();
   const { id } = useParams();
+  const { user } = useAuth();
+  const { data, isLoading, error } = useRoomDetails(id);
+
+  const reviews = useGetReviews();
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState([
@@ -29,10 +31,7 @@ const RoomDetails = () => {
 
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
-  const room = hotels.find((r) => r.id === id);
   const roomReviews = reviews?.filter((r) => r.roomId === id);
-
-  if (!room) return <Navigate to="/404" replace />;
 
   const handleBooking = () => {
     if (!user) return navigate("/login");
@@ -89,11 +88,20 @@ const RoomDetails = () => {
       />
     ));
 
+  if (isLoading) {
+    return <div>Loading.....</div>;
+  }
+  if (error) {
+    toast.error(error.message);
+  }
   return (
     <>
       <Helmet>
-        <title>{room.title} - LuxeStay Hotel</title>
-        <meta name="description" content={room.description} />
+        <title>
+          {typeof data?.title === "string" ? data?.title : "- LuxeStay Hotel"}
+        </title>
+
+        <meta name="description" content={data?.description} />
       </Helmet>
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-800">
@@ -105,38 +113,38 @@ const RoomDetails = () => {
             className="grid grid-cols-1 lg:grid-cols-2 gap-8"
           >
             <img
-              src={room.image}
-              alt={room.title}
+              src={data?.image}
+              alt={data?.title}
               className="w-full h-96 object-cover rounded-lg shadow-lg"
             />
 
             <div className="space-y-6">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-300">
-                  {room.title}
+                  {data?.title}
                 </h1>
                 <p className="text-2xl font-bold text-blue-600">
-                  ${room.price}/night
+                  ${data?.price}/night
                 </p>
               </div>
 
               <p className="text-gray-600 dark:text-gray-200">
-                {room.description}
+                {data?.description}
               </p>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
                   <Users className="w-5 h-5 text-gray-500" />
-                  <span>Up to {room.capacity} guests</span>
+                  <span>Up to {data?.capacity} guests</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <MapPin className="w-5 h-5 text-gray-500" />
-                  <span>{room.size}</span>
+                  <span>{data?.size}</span>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {room.featured?.map((feature, idx) => (
+                {data?.featured?.map((feature, idx) => (
                   <span
                     key={idx}
                     className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded-full"
@@ -149,7 +157,7 @@ const RoomDetails = () => {
               <div>
                 <h3 className="text-lg font-semibold">Amenities</h3>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {room.amenities?.map((icon, idx) => (
+                  {data?.amenities?.map((icon, idx) => (
                     <div key={idx} className="p-2 bg-gray-100 rounded-lg">
                       <span className="material-icons text-gray-600 text-base">
                         {icon}
@@ -162,9 +170,9 @@ const RoomDetails = () => {
               <button
                 onClick={handleBooking}
                 className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-3 rounded disabled:opacity-50"
-                disabled={!isAvailable || !room.isAvailable}
+                disabled={!isAvailable || !data?.isAvailable}
               >
-                {isAvailable === false || room.isAvailable === false
+                {isAvailable === false || data?.isAvailable === false
                   ? "Not Available"
                   : "Book Now"}
               </button>
@@ -173,7 +181,7 @@ const RoomDetails = () => {
               {isBookingModalOpen && (
                 <div className="fixed inset-0  overflow-auto bg-opacity-30 flex items-center justify-center z-50">
                   <div className="bg-white dark:bg-gray-700 p-6 rounded-lg w-full max-w-md space-y-4">
-                    <h2 className="text-xl font-bold">Book {room.title}</h2>
+                    <h2 className="text-xl font-bold">Book {data?.title}</h2>
 
                     <div>
                       <label
@@ -193,11 +201,11 @@ const RoomDetails = () => {
                     <div className="border-t pt-4 text-sm space-y-2">
                       <div className="flex justify-between">
                         <span>Room:</span>
-                        <span>{room.title}</span>
+                        <span>{data?.title}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Price per night:</span>
-                        <span>${room.price}</span>
+                        <span>${data?.price}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Date:</span>
@@ -213,7 +221,7 @@ const RoomDetails = () => {
                       </div>
                       <div className="flex justify-between font-semibold border-t pt-2">
                         <span>Total:</span>
-                        <span>${room.price}</span>
+                        <span>${data?.price}</span>
                       </div>
                     </div>
 
