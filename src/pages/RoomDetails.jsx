@@ -17,9 +17,7 @@ const RoomDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const { data, isLoading, error } = useRoomDetails(id);
-
   const reviews = useGetReviews();
-
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState([
