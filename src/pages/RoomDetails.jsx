@@ -12,6 +12,7 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import useRoomDetails from "../Hooks/useRoomDetails";
+import LoadingSpinner from "../Components/LoadingSpiner";
 const RoomDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -89,7 +90,9 @@ const RoomDetails = () => {
     ));
 
   if (isLoading) {
-    return <div>Loading.....</div>;
+    return <>
+    <LoadingSpinner />
+    </>;
   }
   if (error) {
     toast.error(error.message);
