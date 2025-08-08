@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 
 const AboutUs = () => {
   return (
-    <section className="px-4 py-16  lg:px-20">
+    <section className="px-4 py-16 lg:px-20">
       <div className="max-w-6xl mx-auto text-center">
         {/* Icon */}
         <div className="flex justify-center mb-6">
@@ -16,7 +16,7 @@ const AboutUs = () => {
         <h2 className="mb-4 text-3xl font-bold text-gray-800">About Us</h2>
 
         {/* Description */}
-        <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-600">
+        <p className="max-w-3xl mx-auto text-lg leading-relaxed">
           We are a passionate team dedicated to providing top-quality transport
           services with comfort, safety, and reliability. Our mission is to
           connect people to their destinations while making every journey an
