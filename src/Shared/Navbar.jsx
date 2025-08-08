@@ -16,7 +16,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/", icon: MapPin },
     { name: "Rooms", path: "/rooms", icon: Calendar },
-    { name: "My Bookings", path: "/bookings", icon: User },
+    // { name: "My Bookings", path: "/bookings", icon: User },
     { name: "About", path: "/about", icon: Info  },
   ];
   const handleLogout = async () => {
@@ -53,7 +53,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="items-center justify-between hidden space-x-8 lg:flex">
+          <div className="items-center justify-between hidden space-x-4 lg:flex">
             <ThemeToggleButton />
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -72,6 +72,19 @@ const Navbar = () => {
                 </Link>
               );
             })}
+            {
+              user &&   <Link
+                  to={`/bookings`}
+                  className={`flex justify-around items-center  px-3 py-2  rounded-lg transition-all duration-200 ${
+                    location.pathname === '/rooms'
+                      ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
+                      : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50 "
+                  }`}
+                >
+                  <User className="w-4 h-4 ml-1" />
+                  <span className="flex">Bookings</span>
+                </Link>
+            }
             {user ? (
               <button
                 onClick={handleLogout}
