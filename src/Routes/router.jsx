@@ -8,6 +8,7 @@ import Rooms from "../pages/Rooms";
 import MyBookings from "../pages/MyBookings";
 import RoomDetails from "../pages/RoomDetails";
 import PrivetRoutes from "./PrivetRoutes";
+import AboutUs from "../pages/AboutUs";
 
 export const routes = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const routes = createBrowserRouter([
       {
         path: "/rooms",
         element: <Rooms />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
       },
       {
         path: "/roomsDetails/:id",

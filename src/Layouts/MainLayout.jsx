@@ -23,7 +23,7 @@ const Mainlayout = () => {
     <div className="dark:bg-gray-800 dark:text-white">
       <ScrollToTop />
 
-      <header>
+      <header className="sticky top-0 z-50">
         <nav>
           <Navbar />
         </nav>
