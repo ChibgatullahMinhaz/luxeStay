@@ -53,14 +53,14 @@ const HeroSlider = () => {
           className="absolute inset-0"
         >
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className="absolute inset-0 bg-center bg-cover"
             style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
           >
             <div className="absolute inset-0 bg-black/40" />
           </div>
 
-          <div className="relative z-10 h-full flex items-center justify-center">
-            <div className="text-center text-white max-w-4xl mx-auto px-4">
+          <div className="relative z-10 flex items-center justify-center h-full">
+            <div className="max-w-4xl px-4 mx-auto text-center text-white">
               <motion.div
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -79,7 +79,7 @@ const HeroSlider = () => {
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
+                className="mb-6 text-5xl font-bold leading-tight md:text-7xl"
               >
                 {slides[currentSlide].title}
               </motion.h1>
@@ -88,7 +88,7 @@ const HeroSlider = () => {
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.8 }}
-                className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto"
+                className="max-w-2xl mx-auto mb-8 text-xl text-gray-200 md:text-2xl"
               >
                 {slides[currentSlide].description}
               </motion.p>
@@ -97,17 +97,17 @@ const HeroSlider = () => {
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.9, duration: 0.8 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center"
+                className="flex flex-col justify-center gap-4 sm:flex-row"
               >
                 <Link to="/rooms">
-                  <button size="lg" className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-lg px-8 py-3">
+                  <button size="lg" className="px-8 py-3 text-lg rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800">
                     {slides[currentSlide].cta}
                   </button>
                 </Link>
                 <button 
                   size="lg" 
                   variant="outline" 
-                  className="border-white flex items-center text-white hover:bg-white hover:text-black text-lg px-8 py-3 bg-white/10 backdrop-blur-sm"
+                  className="flex items-center px-8 py-3 text-lg text-white border-white rounded-lg hover:bg-white hover:text-black bg-white/10 backdrop-blur-sm"
                 >
                   <MapPin className="w-5 h-5 mr-2" />
                   View Location
@@ -121,19 +121,19 @@ const HeroSlider = () => {
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition"
+        className="absolute p-3 transition transform -translate-y-1/2 rounded-full left-4 top-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm"
       >
         <ChevronLeft className="w-6 h-6 text-white" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition"
+        className="absolute p-3 transition transform -translate-y-1/2 rounded-full right-4 top-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm"
       >
         <ChevronRight className="w-6 h-6 text-white" />
       </button>
 
       {/* Dots Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <div className="absolute flex space-x-2 transform -translate-x-1/2 bottom-8 left-1/2">
         {slides.map((_, index) => (
           <button
             key={index}
