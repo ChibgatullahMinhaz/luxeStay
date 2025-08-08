@@ -75,13 +75,13 @@ const Navbar = () => {
             {user ? (
               <button
                 onClick={handleLogout}
-                className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
+                className="w-full p-3 cursor-pointer rounded-lg mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
               >
                 Logout
               </button>
             ) : (
               <Link to="/login" onClick={() => setIsOpen(false)}>
-                <button className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
+                <button className="w-full p-3 rounded-lg cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
                   Login
                 </button>
               </Link>
