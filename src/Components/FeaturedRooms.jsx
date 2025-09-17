@@ -48,7 +48,7 @@ const FeaturedRooms = () => {
         >
           <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl dark:text-amber-50">
             Featured{" "}
-            <span className="bg-gradient-to-r from-[#2563EB]  dark:from-amber-50 bg-clip-text text-transparent">
+            <span className="text-[#2563EB]  dark:from-amber-50 bg-clip-text">
               Rooms
             </span>
           </h2>

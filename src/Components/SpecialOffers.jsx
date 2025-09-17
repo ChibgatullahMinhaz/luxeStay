@@ -88,7 +88,7 @@ const icons = {
   ),
   gift: (
     <svg
-      className="w-8 h-8 text-primary-600 mr-3"
+      className="w-8 h-8 mr-3 text-primary-600"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -170,18 +170,18 @@ const icons = {
 const SpecialOffers = () => {
   return (
     <section className="py-20 bg-gradient-to-b from-white to-[#EFF6FF] dark:bg-gray-800 dark:bg-none">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="mb-16 text-center">
           <div className="flex items-center justify-center mb-4">
             {icons.gift}
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-amber-50">
+            <h2 className="text-4xl font-bold text-gray-900 md:text-5xl dark:text-amber-50">
               Special{" "}
-              <span className="bg-gradient-to-r from-[#2563EB]  dark:from-amber-50 bg-clip-text text-transparent">
+              <span className="text-[#2563EB]  dark:from-amber-50 bg-clip-text">
                 Offers
               </span>
             </h2>
           </div>
-          <p className="text-xl text-gray-600 dark:text-amber-50 max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-amber-50">
             Take advantage of our exclusive deals and make your stay even more
             memorable while saving money
           </p>
@@ -193,7 +193,7 @@ const SpecialOffers = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: false }}
           
-          className="grid grid-cols-1  md:grid-cols-2 gap-8"
+          className="grid grid-cols-1 gap-8 md:grid-cols-2"
         >
           {offers.map((offer, index) => {
             const Icon = icons[offer.icon] || null;
@@ -201,13 +201,13 @@ const SpecialOffers = () => {
               <motion.div
                 key={offer.id}
                 whileHover={{ y: -5 }}
-                className="group border rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 bg-white dark:bg-gray-700"
+                className="overflow-hidden transition-shadow duration-300 bg-white border shadow-xl group rounded-xl hover:shadow-2xl dark:bg-gray-700"
               >
                 <div className="relative">
                   <img
                     src={offer.image}
                     alt={offer.title}
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover w-full h-48 transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -219,7 +219,7 @@ const SpecialOffers = () => {
                     </span>
                   </div>
 
-                  <div className="absolute bottom-4 left-4 text-white flex items-center space-x-2">
+                  <div className="absolute flex items-center space-x-2 text-white bottom-4 left-4">
                     {Icon}
                     <span className="text-sm font-medium">
                       Limited Time Offer
@@ -228,16 +228,16 @@ const SpecialOffers = () => {
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-amber-50 mb-3">
+                  <h3 className="mb-3 text-2xl font-bold text-gray-900 dark:text-amber-50">
                     {offer.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-200 mb-4 leading-relaxed">
+                  <p className="mb-4 leading-relaxed text-gray-600 dark:text-gray-200">
                     {offer.description}
                   </p>
 
                   <div className="flex items-center justify-between mb-6 text-sm text-gray-500 dark:text-gray-300">
                     <svg
-                      className="w-4 h-4 inline mr-1"
+                      className="inline w-4 h-4 mr-1"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -293,21 +293,21 @@ const SpecialOffers = () => {
           })}
         </motion.div>
 
-        <div className="text-center mt-16">
+        <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-[#2563EB] to-[#c9cdd7] dark:bg-gray-600 dark:bg-none rounded-2xl p-8 text-white max-w-3xl mx-auto">
-            <h3 className="text-2xl font-bold dark:text-amber-50 mb-4">
+            <h3 className="mb-4 text-2xl font-bold dark:text-amber-50">
               🎉 Subscribe for Exclusive Deals!
             </h3>
-            <p className="text-primary-100 mb-6 max-w-2xl mx-auto">
+            <p className="max-w-2xl mx-auto mb-6 text-primary-100">
               Be the first to know about our latest offers, seasonal packages,
               and special promotions. Join our newsletter and never miss a great
               deal!
             </p>
-            <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <form className="flex flex-col max-w-md gap-4 mx-auto sm:flex-row">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 bg-white focus:outline-none focus:bg-white focus:ring-white"
+                className="flex-1 px-4 py-3 text-gray-900 bg-white rounded-lg focus:outline-none focus:bg-white focus:ring-white"
               />
               <button
                 type="submit"

@@ -38,11 +38,8 @@ const HeroSlider = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
-  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div className="relative overflow-hidden" id='minheight'>
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -117,21 +114,6 @@ const HeroSlider = () => {
           </div>
         </motion.div>
       </AnimatePresence>
-
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute p-3 transition transform -translate-y-1/2 rounded-full left-4 top-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm"
-      >
-        <ChevronLeft className="w-6 h-6 text-white" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute p-3 transition transform -translate-y-1/2 rounded-full right-4 top-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm"
-      >
-        <ChevronRight className="w-6 h-6 text-white" />
-      </button>
-
       {/* Dots Indicator */}
       <div className="absolute flex space-x-2 transform -translate-x-1/2 bottom-8 left-1/2">
         {slides.map((_, index) => (

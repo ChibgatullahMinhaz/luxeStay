@@ -11,7 +11,6 @@ import OfferModal from "../../Components/OfferModal";
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
 
-
   useEffect(() => {
     const hasSeen = sessionStorage.getItem("seenModal");
     if (!hasSeen) {
@@ -39,11 +38,12 @@ const Home = () => {
         <OfferModal isOpen={showModal} isClose={() => setShowModal(false)} />
 
         <HeroSlider />
-        <HotelMap />
+
         <FeaturedRooms />
         <UserReviews />
         <Amenities />
         <SpecialOffers />
+        <HotelMap />
       </div>
     </>
   );

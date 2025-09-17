@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ThemeToggleButton from "./ThemeToggleButton";
-import { Menu, X, MapPin, Calendar, User,Info  } from "lucide-react";
+import { Menu, X, MapPin } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import useAuth from "../Hooks/useAuth";
@@ -14,10 +14,9 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const navItems = [
-    { name: "Home", path: "/", icon: MapPin },
-    { name: "Rooms", path: "/rooms", icon: Calendar },
-    // { name: "My Bookings", path: "/bookings", icon: User },
-    { name: "About", path: "/about", icon: Info  },
+    { name: "Home", path: "/" },
+    { name: "Rooms", path: "/rooms" },
+    { name: "About", path: "/about" },
   ];
   const handleLogout = async () => {
     signOut(auth)
@@ -47,27 +46,27 @@ const Navbar = () => {
             <div className="w-10 h-10 bg-gradient-to-r from-[#2563EB] to-[#1E3A8A] rounded-lg flex items-center justify-center">
               <MapPin className="w-6 h-6 text-white dark:text-amber-50" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-[#2563EB]  dark:from-amber-50  bg-clip-text text-transparent">
+            <span className="text-2xl font-bold text-[#2563EB]  dark:text-amber-50  bg-clip-text">
               LuxeStay
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="items-center justify-between hidden space-x-4 lg:flex">
+          {/* <div className="hidden space-x-4 lg:flex">
             <ThemeToggleButton />
             {navItems.map((item) => {
-              const Icon = item.icon;
+              
               return (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`flex justify-around items-center  px-3 py-2 rounded-lg transition-all duration-200 ${
+                  className={`flex justify-around items-center   rounded-lg transition-all duration-200 ${
                     location.pathname === item.path
                       ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
                       : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50 "
                   }`}
                 >
-                  <Icon className="w-4 h-4 ml-1" />
+                  
                   <span>{item.name}</span>
                 </Link>
               );
@@ -75,26 +74,72 @@ const Navbar = () => {
             {
               user &&   <Link
                   to={`/bookings`}
-                  className={`flex justify-around items-center  px-3 py-2  rounded-lg transition-all duration-200 ${
+                  className={`flex justify-around items-center   transition-all duration-200 ${
                     location.pathname === '/rooms'
                       ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
-                      : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50 "
+                      : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50 hover:rounded-lg  border-b"
                   }`}
                 >
-                  <User className="w-4 h-4 ml-1" />
+                  
                   <span className="flex">Bookings</span>
                 </Link>
             }
             {user ? (
               <button
                 onClick={handleLogout}
-                className="w-full p-3 cursor-pointer rounded-lg mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
+                className="w-full px-3 py-2 cursor-pointer rounded-lg mt-2 text-amber-50 bg-[#1D4ED8] transition duration-300"
               >
                 Logout
               </button>
             ) : (
               <Link to="/login" onClick={() => setIsOpen(false)}>
-                <button className="w-full p-3 rounded-lg cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
+                <button className="w-full px-3 py-2 rounded-lg cursor-pointer text-amber-50 bg-[#1D4ED8] transition duration-300">
+                  Login
+                </button>
+              </Link>
+            )}
+          </div> */}
+
+          {/* Desktop Navigation */}
+          <div className="items-center hidden space-x-4 lg:flex">
+            <ThemeToggleButton />
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`px-3 py-2 flex items-center rounded-lg transition-all duration-200 ${
+                  location.pathname === item.path
+                    ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
+                    : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            {user && (
+              <Link
+                to="/bookings"
+                className={`px-3 py-2 flex items-center rounded-lg transition-all duration-200 ${
+                  location.pathname === "/rooms"
+                    ? "bg-[#EFF6FF] dark:bg-amber-50 text-[#2563EB]"
+                    : "text-gray-700 dark:text-amber-50 hover:text-gray-700 hover:bg-gray-50"
+                }`}
+              >
+                Bookings
+              </Link>
+            )}
+
+            {user ? (
+              <button
+                onClick={handleLogout}
+                className="px-3 py-2 rounded-lg text-amber-50 bg-[#1D4ED8] transition duration-300"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                <button className="px-3 py-2 rounded-lg text-amber-50 bg-[#1D4ED8] transition duration-300">
                   Login
                 </button>
               </Link>
@@ -129,7 +174,6 @@ const Navbar = () => {
           >
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-800">
               {navItems.map((item) => {
-                const Icon = item.icon;
                 return (
                   <Link
                     key={item.name}
@@ -141,7 +185,6 @@ const Navbar = () => {
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
-                    <Icon className="w-4 h-4" />
                     <span>{item.name}</span>
                   </Link>
                 );
@@ -149,13 +192,13 @@ const Navbar = () => {
               {user ? (
                 <button
                   onClick={handleLogout}
-                  className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300"
+                  className="w-full p-3 cursor-pointer mt-2 bg-[#1D4ED8]  transition duration-300"
                 >
                   Logout
                 </button>
               ) : (
                 <Link to="/login" onClick={() => setIsOpen(false)}>
-                  <button className="w-full p-3 cursor-pointer mt-2 bg-gradient-to-r from-[var(--primary)] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[var(--primary)] transition duration-300">
+                  <button className="w-full p-3 cursor-pointer mt-2 bg-[#1D4ED8] transition duration-300">
                     Login
                   </button>
                 </Link>

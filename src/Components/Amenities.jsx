@@ -64,36 +64,36 @@ const amenities = [
   const Amenities = () => {
     return (
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:bg-gray-700 dark:bg-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div
-            className="text-center mb-16"
+            className="mb-16 text-center"
             style={{ opacity: 1, transform: "translateY(0)" }} // replace motion effect
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-amber-50 mb-4">
+            <h2 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl dark:text-amber-50">
               World-Class{" "}
-              <span className="bg-gradient-to-r from-[#2563EB]  dark:from-amber-50 bg-clip-text text-transparent">
+              <span className="text-[#2563EB]  dark:from-amber-50 bg-clip-text">
                 Amenities
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl dark:text-gray-300 mx-auto">
+            <p className="max-w-2xl mx-auto text-xl text-gray-600 dark:text-gray-300">
               Experience luxury at every turn with our comprehensive range of premium amenities and
               services
             </p>
           </div>
   
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {amenities.map((amenity, index) => (
               <div
                 key={index}
-                className="h-full border-0 shadow-md rounded-2xl hover:shadow-lg transition-all duration-300 bg-white dark:bg-gray-800 group"
+                className="h-full transition-all duration-300 bg-white border-0 shadow-md rounded-2xl hover:shadow-lg dark:bg-gray-800 group"
                
               >
                 <div className="p-6 text-center rounded-2xl">
                   <div className="bg-gradient-to-r from-[#DBEAFE] to-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <span className="text-[#2563EB] text-2xl">{amenity.icon}</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-amber-50 mb-2">{amenity.title}</h3>
-                  <p className="text-gray-600 text-sm dark:text-gray-100">{amenity.description}</p>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-amber-50">{amenity.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-100">{amenity.description}</p>
                 </div>
               </div>
             ))}
